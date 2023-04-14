@@ -1,0 +1,4 @@
+*.xlsx
+*.exe
+chromedriver_win32
+__pycache__
