@@ -37,6 +37,18 @@ def subtract_times(time1, time2):
     diff_minutes = (diff_seconds % 3600) // 60
     diff_seconds = diff_seconds % 60
     return '{}{:02d}:{:02d}:{:02d}'.format(sign, diff_hours, diff_minutes, diff_seconds)
+
+def calculate_time_percentage(time1, time2):
+    if time1 == '00:00:00':
+        return 0.0
+    if time2 == '00:00:00':
+        return 0.0
+    h1, m1, s1 = map(int, time1.split(':'))
+    h2, m2, s2 = map(int, time2.split(':'))
+    total_seconds1 = h1 * 3600 + m1 * 60 + s1
+    total_seconds2 = h2 * 3600 + m2 * 60 + s2
+    percentage = total_seconds2 / total_seconds1
+    return percentage
 #------------------------------------------------------------------------------------------------------------------------
                                             #DICIONARIOS
 categoria_dicionario = {
@@ -49,6 +61,8 @@ categoria_dicionario = {
                     'IPOS': 'Outros',
                     'IPTS': 'Terceiros'
                 }
+
+float_format = {'Porcetagem PADTEC': '%.2f%%', 'Porcetagem RADIANTE': '%.2f%%'}
 #------------------------------------------------------------------------------------------------------------------------
                                             #ARRAYS E VARIÁVEIS
 desconto_dado = []
@@ -67,6 +81,8 @@ categoria_soma_dada_pad = {categoria: '00:00:00' for categoria in categorias}
 categoria_soma_auto_pad = {categoria: '00:00:00' for categoria in categorias}
 categoria_soma_dada_rad = {categoria: '00:00:00' for categoria in categorias}
 categoria_soma_auto_rad = {categoria: '00:00:00' for categoria in categorias}
+categoria_porcetagem_pad = {categoria: '00:00:00' for categoria in categorias}
+categoria_porcetagem_rad = {categoria: '00:00:00' for categoria in categorias}
 
 arquivo_desconto_auto = "descontos abril.xlsx"
 arquivo_desconto_dado = "Indicadores - Abril.xlsx"
@@ -136,6 +152,13 @@ for index_auto, row_auto in desconto_auto_planilha.iterrows():
             categoria_soma_auto_pad[categoria] = soma_tempos(categoria_soma_auto_pad[categoria], row_auto['Desconto'])
         else:
             categoria_soma_auto_rad[categoria] = soma_tempos(categoria_soma_auto_rad[categoria], row_auto['Desconto'])
+            
+#------------------------------------------------------------------------------------------------------------------------
+                                            #SALVANDO EM PORCETAGEM
+            
+for index in categorias:
+    categoria_porcetagem_pad[index] = calculate_time_percentage(categoria_soma_dada_pad[index], categoria_soma_auto_pad[index] )
+    categoria_porcetagem_rad[index] = calculate_time_percentage(categoria_soma_dada_rad[index], categoria_soma_auto_rad[index] )
 #------------------------------------------------------------------------------------------------------------------------
                                             # DATA FRAMES
 data = {
@@ -151,10 +174,12 @@ dataf = {
     'Desconto Dado Total PADTEC': categoria_soma_dada_pad,
     'Desconto Automatico Total PADTEC': categoria_soma_auto_pad,
     'Desconto Dado Total RADIANTE': categoria_soma_dada_rad,
-    'Desconto Automatico Total RADIANTE': categoria_soma_auto_rad
+    'Desconto Automatico Total RADIANTE': categoria_soma_auto_rad,
+    'Porcetagem PADTEC': categoria_porcetagem_pad,
+    'Porcetagem RADIANTE': categoria_porcetagem_rad
 }
 
-df2 = pd.DataFrame(dataf)
+df2 = pd.DataFrame(dataf, dtype=float)
 df = pd.DataFrame(data)
 #------------------------------------------------------------------------------------------------------------------------
                                     #SALVANDO NO EXCEL E ESTILIZANDO

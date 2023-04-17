@@ -157,6 +157,30 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
         table = soup.find(name='table')
             
         pd_tabela = pd.read_html(str(table))[0] #passando a tabela para o pandas
+#------------------------------------------------------------------------------------------------------------------------
+                                            #LENDO SEGUNDA TABELA
+        elemento_botao = chrome.find_element(By.XPATH,'/html/body/div[2]/ul/li[2]/a').click()
+        tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="automatico"]/table/tbody') #cria um array de elementos tabela para saber se a tabela foi rederinzada na página
+        
+        if len(tabela_existe) == 0: #checa se a tabela e a estação foram carregados na página
+            while True: #roda loop até que ela seja carregada
+                print(f"salve ticket de novo {row['Unnamed: 0']}")
+                chrome.refresh() #recarregar página do navegador
+                time.sleep(1)
+                elemento_botao = chrome.find_element(By.XPATH,'/html/body/div[2]/ul/li[2]/a').click()
+                tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="automatico"]/table/tbody')
+                if len(tabela_existe) > 0: #para o loop quando a tabela for carregada
+                    break
+            
+        
+        elemento_tabela2 = chrome.find_element(By.XPATH,'//*[@id="automatico"]/table' ) #buscando a tabela/pega as informações
+        html_content2 = elemento_tabela2.get_attribute('outerHTML') #trazendo o HTML do elemento tabela/ transforma a tabela em variável a partir dos dados HTML
+
+        #Parsear o conteúdo HTML utilizando a BeautifulSoup
+        soup2 = BeautifulSoup(html_content2, 'html.parser')
+        table2 = soup2.find(name='table')
+            
+        pd_tabela_2 = pd.read_html(str(table2))[0] #passando a tabela para o pandas
         
         ultima_entrada = str('')
         
@@ -204,9 +228,40 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                         
                     ultima_entrada = texto
                     cont2 += 1
+                    
+        if ultima_entrada[6:10]  == 'IPFE' or ultima_entrada[6:10] =='IPFR':
+            tickets_codigo.append(row['Unnamed: 0']) #jogar no array o número do ticket
+            codigo_codigos.append('Fechamento junto com a ocorrencia') #se o string codigo receber algo diferente de vazio, ou seja, receber texto. Ai o array recebe a string
+            data_codigos.append(pd_tabela_2['Informações da ocorrência'][0][0:16]) #salva data da ocorrencia
+            estacao_codigos.append(estacao) #salva em qual estação ocorreu
+            categoria_codigos.append(categoria_dicionario[ultima_entrada[6:10]])
+            tipo_codigos.append('Fechamento')
+            if estacao[0] == ' ':
+                estado_codigos.append(estacao[1:3])
+            else:
+                estado_codigos.append(estacao[0:2]) #salva qual estado pertence a estacao
+            empresa_codigos.append(nome_empresa(ultima_entrada[0:5]))
+            data1 = datetime.strptime(data_codigos[cont2 - 1], '%d/%m/%Y %H:%M')
+            data2 = datetime.strptime(data_codigos[cont2], '%d/%m/%Y %H:%M')
+            data_abertura.append(data_codigos[cont2 - 1])
+            data_fechamento.append(data_codigos[cont2])
+            diferenca = data2 - data1 #calcula o desconto
+            desconto_abertura.append(ultima_entrada)
+            desconto_fechamento.append('Fechamento junto com a ocorrencia')
+            # Converter a diferença em uma string com o formato horas:minutos:segundos
+            diferenca_str = strfdelta(diferenca, "{hours:02d}:{minutes:02d}:{seconds:02d}")
+            desconto_auto.append(diferenca_str)
+            tickets_auto.append(row['Unnamed: 0'])
+            codigo_auto.append(categoria_dicionario[ultima_entrada[6:10]])
+            empresa_auto.append(nome_empresa(ultima_entrada[0:5]))
+            par = True
+            possui_par[cont2 - 1] = "Possui"
+                    
+            possui_par.append(par_correto(par))
+            cont2 += 1
                         
         chrome.quit #fecha o chrome após terminar a operação desejada
- 
+        
 #Fazer a tabela no Pandas
 data = {
         'Tickets': tickets_codigo, 
