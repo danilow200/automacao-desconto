@@ -1,30 +1,34 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-from openpyxl import load_workbook
+import openpyxl
+from openpyxl.chart import BarChart, Reference
 
-# Lê o arquivo xlsx
-df = pd.read_excel('teste.xlsx')
+# abrir o arquivo xlsx
+wb = openpyxl.load_workbook('teste.xlsx')
 
-# Agrupa os dados por tipo de categoria e conta o número de tickets em cada categoria
-counts = df.groupby('Categoria').size()
+# selecionar a planilha desejada
+ws = wb['Codigos Geral']
 
-# Gera o gráfico de barras
-plt.bar(counts.index, counts.values)
-plt.title('Quantidade de Tickets por Categoria')
-plt.xlabel('Categoria')
-plt.ylabel('Quantidade')
+# contar as repetições de cada string na coluna 8
+count_dict = {}
+for cell in ws['H']:
+    if cell.value in count_dict:
+        count_dict[cell.value] += 1
+    else:
+        count_dict[cell.value] = 1
 
-# Carrega o teste xlsx e insere o gráfico na planilha 'Gráfico'
-book = load_workbook('teste.xlsx')
-writer = pd.ExcelWriter('teste.xlsx', engine='openpyxl') 
-writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
+# criar a lista de dados para o gráfico
+data = []
+for key, value in count_dict.items():
+    data.append([key, value])
 
-# Insere o gráfico na planilha 'Gráfico'
-fig = plt.gcf()
-ws = book['Gráfico']
-img = plt.imshow(fig)
-img.set_extent([0, 10, 0, 10])
-ws.add_image(img, 'A1')
+# definir a faixa de dados para o gráfico
+chart_data = Reference(ws, min_col=8, min_row=4, max_col=8, max_row=len(data))
 
-# Salva as alterações no arquivo xlsx
-writer.save()
+# criar o gráfico de barras
+chart = BarChart()
+chart.add_data(chart_data)
+
+# adicionar o gráfico à planilha
+ws.add_chart(chart, "E2")
+
+# salvar o arquivo com o gráfico
+wb.save("arquivo_com_grafico.xlsx")

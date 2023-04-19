@@ -126,15 +126,15 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
         chrome.get(url_logs)#navega para essa url do chrome    
         time.sleep(1) #Delay 
         
-        elemento_ticket = chrome.find_element(By.XPATH,'//*[@id="header"]/form/input[1]')  #"encontra" o campo de preenchimento de ticket
+        elemento_ticket = chrome.find_element(By.XPATH,'//*[@id="filter-box"]')  #"encontra" o campo de preenchimento de ticket
         elemento_ticket.send_keys(row['Unnamed: 0']) #cola o número do ticket no campo
-        elemento_botao = chrome.find_element(By.XPATH,'//*[@id="header"]/form/input[2]').click() #encontra e depois clica no botão "enviar"
+        elemento_botao = chrome.find_element(By.XPATH,'//*[@id="filter-clear"]').click() #encontra e depois clica no botão "enviar"
         
         print(row['Unnamed: 0']) #prita no terminal o ticket atual
         
         tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="manual"]/table/tbody') #cria um array de elementos tabela para saber se a tabela foi rederinzada na página
         
-        elemento_estacao = chrome.find_element(By.XPATH,'/html/body/table/tbody/tr[1]/td[4]' ) #busca estacao no navegador
+        elemento_estacao = chrome.find_element(By.XPATH,'//*[@id="content"]/table/tbody/tr[1]/td[2]' ) #busca estacao no navegador
         estacao = elemento_estacao.get_attribute('innerHTML')
         
         if len(tabela_existe) == 0 or estacao == " ": #checa se a tabela e a estação foram carregados na página
@@ -143,7 +143,7 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                 chrome.refresh() #recarregar página do navegador
                 time.sleep(1)
                 tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="manual"]/table/tbody')
-                elemento_estacao = chrome.find_element(By.XPATH,'/html/body/table/tbody/tr[1]/td[4]' ) #busca estacao no navegador
+                elemento_estacao = chrome.find_element(By.XPATH,'//*[@id="content"]/table/tbody/tr[1]/td[2]' ) #busca estacao no navegador
                 estacao = elemento_estacao.get_attribute('innerHTML')
                 if len(tabela_existe) > 0 and estacao != " ": #para o loop quando a tabela for carregada
                     break
@@ -159,7 +159,6 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
         pd_tabela = pd.read_html(str(table))[0] #passando a tabela para o pandas
 #------------------------------------------------------------------------------------------------------------------------
                                             #LENDO SEGUNDA TABELA
-        elemento_botao = chrome.find_element(By.XPATH,'/html/body/div[2]/ul/li[2]/a').click()
         tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="automatico"]/table/tbody') #cria um array de elementos tabela para saber se a tabela foi rederinzada na página
         
         if len(tabela_existe) == 0: #checa se a tabela e a estação foram carregados na página
@@ -167,7 +166,6 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                 print(f"salve ticket de novo {row['Unnamed: 0']}")
                 chrome.refresh() #recarregar página do navegador
                 time.sleep(1)
-                elemento_botao = chrome.find_element(By.XPATH,'/html/body/div[2]/ul/li[2]/a').click()
                 tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="automatico"]/table/tbody')
                 if len(tabela_existe) > 0: #para o loop quando a tabela for carregada
                     break
@@ -229,10 +227,9 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                     ultima_entrada = texto
                     cont2 += 1
                     
-        if ultima_entrada[6:10]  == 'IPFE' or ultima_entrada[6:10] =='IPFR':
+        if ultima_entrada[5:11]  == '$IPFE#' or ultima_entrada[5:11] =='$IPFR#':
             tickets_codigo.append(row['Unnamed: 0']) #jogar no array o número do ticket
             codigo_codigos.append('Fechamento junto com a ocorrencia') #se o string codigo receber algo diferente de vazio, ou seja, receber texto. Ai o array recebe a string
-            data_codigos.append(pd_tabela_2['Informações da ocorrência'][0][0:16]) #salva data da ocorrencia
             estacao_codigos.append(estacao) #salva em qual estação ocorreu
             categoria_codigos.append(categoria_dicionario[ultima_entrada[6:10]])
             tipo_codigos.append('Fechamento')
@@ -242,7 +239,17 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                 estado_codigos.append(estacao[0:2]) #salva qual estado pertence a estacao
             empresa_codigos.append(nome_empresa(ultima_entrada[0:5]))
             data1 = datetime.strptime(data_codigos[cont2 - 1], '%d/%m/%Y %H:%M')
-            data2 = datetime.strptime(data_codigos[cont2], '%d/%m/%Y %H:%M')
+            valida = True
+            if ultima_entrada[5:11]  == '$IPFE#':
+                for index_tabela3,row_tabela3 in reversed(list(pd_tabela_2.iterrows())):
+                    if row_tabela3['Categoria'] == 'Direcionamento da Solicitação':
+                        data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], '%d/%m/%Y %H:%M')
+                        if data2 > data1:
+                            data_codigos.append(pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16])
+                            valida = False
+            if valida:
+                data_codigos.append(pd_tabela_2['Informações da ocorrência'][0][0:16]) #salva data da ocorrencia
+                data2 = datetime.strptime(data_codigos[cont2], '%d/%m/%Y %H:%M')
             data_abertura.append(data_codigos[cont2 - 1])
             data_fechamento.append(data_codigos[cont2])
             diferenca = data2 - data1 #calcula o desconto
