@@ -1,34 +1,24 @@
 import openpyxl
-from openpyxl.chart import BarChart, Reference
+from openpyxl.chart import BarChart, Reference, Series
 
-# abrir o arquivo xlsx
-wb = openpyxl.load_workbook('teste.xlsx')
+pagina = 'Comparação Total'
+ 
+workbook = openpyxl.load_workbook('teste.xlsx')
 
-# selecionar a planilha desejada
-ws = wb['Codigos Geral']
+worksheet = workbook[pagina]
 
-# contar as repetições de cada string na coluna 8
-count_dict = {}
-for cell in ws['H']:
-    if cell.value in count_dict:
-        count_dict[cell.value] += 1
-    else:
-        count_dict[cell.value] = 1
-
-# criar a lista de dados para o gráfico
-data = []
-for key, value in count_dict.items():
-    data.append([key, value])
-
-# definir a faixa de dados para o gráfico
-chart_data = Reference(ws, min_col=8, min_row=4, max_col=8, max_row=len(data))
-
-# criar o gráfico de barras
 chart = BarChart()
-chart.add_data(chart_data)
+chart.type = 'col'
+chart.title = 'Porcetagem PADTEC'
+chart.x_axis.title = 'Categorias'
+chart.y_axis.title = 'Porcetagem'
 
-# adicionar o gráfico à planilha
-ws.add_chart(chart, "E2")
+categorias = Reference(worksheet, min_col=2, min_row=4, max_row=11)
+valores = Reference(worksheet, min_col=7, min_row=4, max_row=11)
+serie = Series(values=valores, xvalues=categorias)
+chart.add_data(valores, titles_from_data=True)
+chart.set_categories(categorias)
 
-# salvar o arquivo com o gráfico
-wb.save("arquivo_com_grafico.xlsx")
+worksheet.add_chart(chart, 'B14')
+
+workbook.save('teste.xlsx')

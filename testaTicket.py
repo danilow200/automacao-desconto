@@ -9,6 +9,9 @@ import time
 import pandas as pd 
 import xlsxwriter
 
+#------------------------------------------------------------------------------------------------------------------------
+                                            #FUNÇÕES
+
 def strfdelta(tdelta, fmt):
     d = {"days": tdelta.days}
     d["hours"], rem = divmod(tdelta.seconds, 3600)
@@ -33,6 +36,24 @@ def par_correto(x):
         return "Possui"
     else:
         return "Não possui"
+
+
+#------------------------------------------------------------------------------------------------------------------------
+                                            #DICIONARIOS
+
+categoria_dicionario = {
+                    'IPFA': 'Acesso', 
+                    'IPAC': 'Aguardando CIGR',
+                    'IPAR': 'Área de Risco',
+                    'IPAA':'Atividade Agendada',
+                    'IPFR': 'Falha Restabelecida',
+                    'IPFE': 'Falta de Energia',
+                    'IPOS': 'Outros',
+                    'IPTS': 'Terceiros'
+                }
+
+#------------------------------------------------------------------------------------------------------------------------
+                                            #DECLARAÇÃO DE VARIAVEIS
 
 #lista de textos
 lista_textos = ['[PAD]$IPFA#', '[PAD]#IPFA$', '[PAD]$IPAC#', '[PAD]#IPAC$',
@@ -67,21 +88,15 @@ data_fechamento = []
 empresa_auto = []
 codigo_auto = []
 
-categoria_dicionario = {
-                    'IPFA': 'Acesso', 
-                    'IPAC': 'Aguardando CIGR',
-                    'IPAR': 'Área de Risco',
-                    'IPAA':'Atividade Agendada',
-                    'IPFR': 'Falha Restabelecida',
-                    'IPFE': 'Falta de Energia',
-                    'IPOS': 'Outros',
-                    'IPTS': 'Terceiros'
-                }
+
 
 #Site da Telebras e Planilha que será analisada
 url_logs = "https://report.telebras.com.br/scripts/get_incidentes.php" # variável que armazena o link do site que vamos pesquisar
 nome_do_arquivo = 'Indicadores - Abril.xlsx' #armazenando o nome da planilha em uma variável
 
+
+#------------------------------------------------------------------------------------------------------------------------
+                                            #LEITURA DA PLANILHA
 
 #Ler Folha de Descontos dentro da Planilha Indicadores - Março
 numero_tickets = pd.read_excel(nome_do_arquivo,sheet_name='Incidentes') #lendo a planilha do excel
@@ -91,12 +106,17 @@ numero_tickets = numero_tickets.drop_duplicates(subset=['Unnamed: 0']) #exclui a
 
 cont2 = 0 #contador da posição data para uso do calculo do desconto
 
+#------------------------------------------------------------------------------------------------------------------------
+                                            #ENTRADA DO CÓDIGO
+
+# data de inicio
 while True:
     entrada = input('Digite a data de entrada no formato dia/mes/ano:\n')
     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
     if pattern.match(entrada):
         break
-    
+
+# ultima data para leituta    
 while True:
     entrada2 = input('Digite a ultima data de entrada no formato dia/mes/ano:\n')
     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
@@ -107,6 +127,9 @@ while True:
 entrada2_data = datetime.strptime(entrada2, '%d/%m/%Y')
 
 data_validada = False
+
+#------------------------------------------------------------------------------------------------------------------------
+                                    #LEITURA DOS TICKETS DA PLANILHA PARA E USO DO SELENIUM
 
 for index,row in numero_tickets.iterrows():  #Loop que indica o número de repetições que o navegador deve ser aberto e fechado
     data_compara = datetime.strptime(row['Unnamed: 5'][0:10], '%d/%m/%Y')
@@ -131,7 +154,10 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
         elemento_botao = chrome.find_element(By.XPATH,'//*[@id="filter-clear"]').click() #encontra e depois clica no botão "enviar"
         
         print(row['Unnamed: 0']) #prita no terminal o ticket atual
-        
+
+#------------------------------------------------------------------------------------------------------------------------
+                                    #LEITURA DA PRIMEIRA TABELA DO TICKET  
+                                          
         tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="manual"]/table/tbody') #cria um array de elementos tabela para saber se a tabela foi rederinzada na página
         
         elemento_estacao = chrome.find_element(By.XPATH,'//*[@id="content"]/table/tbody/tr[1]/td[2]' ) #busca estacao no navegador
@@ -158,7 +184,8 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
             
         pd_tabela = pd.read_html(str(table))[0] #passando a tabela para o pandas
 #------------------------------------------------------------------------------------------------------------------------
-                                            #LENDO SEGUNDA TABELA
+                                            #LENDO SEGUNDA TABELA DO TICKET
+                                            
         tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="automatico"]/table/tbody') #cria um array de elementos tabela para saber se a tabela foi rederinzada na página
         
         if len(tabela_existe) == 0: #checa se a tabela e a estação foram carregados na página
@@ -181,6 +208,9 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
         pd_tabela_2 = pd.read_html(str(table2))[0] #passando a tabela para o pandas
         
         ultima_entrada = str('')
+        
+#------------------------------------------------------------------------------------------------------------------------
+                            #ANALISA PRIMEIRA TABELA EM BUSCA DE CODIGOS PARA DESCONTO
         
         for index_tabela2,row_tabela2 in reversed(list(pd_tabela.iterrows())):
             
@@ -227,6 +257,9 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                     ultima_entrada = texto
                     cont2 += 1
                     
+#------------------------------------------------------------------------------------------------------------------------
+            #ANALISA SEGUNDA TABELA EM BUSCA PARA APLICAR DESCONTOS QUE NÃO FOI POSSIVEL APENAS COM A PRIMEIRA TABELA
+                            
         if ultima_entrada[5:11]  == '$IPFE#' or ultima_entrada[5:11] =='$IPFR#':
             tickets_codigo.append(row['Unnamed: 0']) #jogar no array o número do ticket
             codigo_codigos.append('Fechamento junto com a ocorrencia') #se o string codigo receber algo diferente de vazio, ou seja, receber texto. Ai o array recebe a string
@@ -255,7 +288,6 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
             diferenca = data2 - data1 #calcula o desconto
             desconto_abertura.append(ultima_entrada)
             desconto_fechamento.append('Fechamento junto com a ocorrencia')
-            # Converter a diferença em uma string com o formato horas:minutos:segundos
             diferenca_str = strfdelta(diferenca, "{hours:02d}:{minutes:02d}:{seconds:02d}")
             desconto_auto.append(diferenca_str)
             tickets_auto.append(row['Unnamed: 0'])
@@ -269,6 +301,9 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                         
         chrome.quit #fecha o chrome após terminar a operação desejada
         
+        
+#------------------------------------------------------------------------------------------------------------------------
+                                #CRIAÇÃO DOS DATAFRAMES E DO DOCUMENTO EXCEL
 #Fazer a tabela no Pandas
 data = {
         'Tickets': tickets_codigo, 
