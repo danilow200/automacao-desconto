@@ -4,9 +4,6 @@ import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
 from openpyxl.drawing.image import Image
-from openpyxl.utils import units
-from openpyxl.utils.dataframe import dataframe_to_rows
-from openpyxl.worksheet.views import SheetView
 #------------------------------------------------------------------------------------------------------------------------
                                             #FUNÇÃO QUE FARÁ A ESTILIZAÇÃO DA SHEETS
 #definie a função e o parâmetro

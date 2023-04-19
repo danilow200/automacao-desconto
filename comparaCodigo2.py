@@ -3,6 +3,7 @@
 import pandas as pd
 import openpyxl
 from EstilizandoExcel import estilizar_excel
+from gerarGrafico import gerar_grafico
 from datetime import datetime
 import shutil
 #------------------------------------------------------------------------------------------------------------------------
@@ -198,4 +199,5 @@ with pd.ExcelWriter(novo_arquivo, engine='openpyxl', mode='a') as writer:
     writer.book.remove(writer.book['Tickets dentro da data'])
     
 estilizar_excel (novo_arquivo)
+gerar_grafico (novo_arquivo)
 #------------------------------------------------------------------------------------------------------------------------
