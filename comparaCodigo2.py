@@ -85,8 +85,8 @@ categoria_soma_auto_rad = {categoria: '00:00:00' for categoria in categorias}
 categoria_porcetagem_pad = {categoria: '00:00:00' for categoria in categorias}
 categoria_porcetagem_rad = {categoria: '00:00:00' for categoria in categorias}
 
-arquivo_desconto_auto = "descontos abril.xlsx"
-arquivo_desconto_dado = "Indicadores - Abril.xlsx"
+arquivo_desconto_auto = ".\\planilhas\\descontos abril.xlsx"
+arquivo_desconto_dado = ".\\planilhas\\Indicadores - Abril.xlsx"
 #------------------------------------------------------------------------------------------------------------------------
                                             #LENDO ARQUIVOS EXCEL
 desconto_auto_planilha = pd.read_excel(arquivo_desconto_auto,sheet_name='Codigos com desconto automatico')
@@ -184,8 +184,8 @@ df2 = pd.DataFrame(dataf)
 df = pd.DataFrame(data)
 #------------------------------------------------------------------------------------------------------------------------
                                     #SALVANDO NO EXCEL E ESTILIZANDO
-
-novo_arquivo = input("Digite o nome para a planilha\n")
+novo_arquivo = '.\\planilhas\\'
+novo_arquivo += input("Digite o nome para a planilha\n")
 novo_arquivo += ".xlsx"
 
 shutil.copy(arquivo_desconto_auto, novo_arquivo)

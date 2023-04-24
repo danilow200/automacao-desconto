@@ -99,7 +99,9 @@ nome_do_arquivo = '12382.csv' #armazenando o nome da planilha em uma variável
                                             #LEITURA DA PLANILHA
 
 #Ler Folha de Descontos dentro da Planilha Indicadores - Março
-numero_tickets = pd.read_csv(nome_do_arquivo, encoding='ISO-8859-1') #lendo a planilha do excel
+numero_tickets = pd.read_csv(nome_do_arquivo, encoding='ISO-8859-1', index_col=None) #lendo a planilha do excel
+numero_tickets = numero_tickets.reset_index().rename(columns={'index': 'num_linha'})
+numero_tickets.iloc[:, 1:] = numero_tickets.iloc[:, 0:-1].values
 #numero_tickets = numero_tickets.drop(index=range(0,2),axis=0)
 numero_tickets = numero_tickets.drop_duplicates(subset=['Incidente - ITSM.Número do incidente']) #exclui as linhas com números de tickets duplicados
 #após isso, a tabela passa a ter o número de linhas e colunas que sobraram.
@@ -110,39 +112,36 @@ cont2 = 0 #contador da posição data para uso do calculo do desconto
                                             #ENTRADA DO CÓDIGO
 
 # data de inicio
-# while True:
-#     entrada = input('Digite a data de entrada no formato dia/mes/ano:\n')
-#     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
-#     if pattern.match(entrada):
-#         break
+while True:
+    entrada = input('Digite a data de entrada no formato dia/mes/ano:\n')
+    pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
+    if pattern.match(entrada):
+        break
 
-# # ultima data para leituta    
-# while True:
-#     entrada2 = input('Digite a ultima data de entrada no formato dia/mes/ano:\n')
-#     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
-#     if pattern.match(entrada2):
-#         break
+# ultima data para leituta    
+while True:
+    entrada2 = input('Digite a ultima data de entrada no formato dia/mes/ano:\n')
+    pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
+    if pattern.match(entrada2):
+        break
     
 
-# entrada2_data = datetime.strptime(entrada2, '%d/%m/%Y')
+entrada2_data = datetime.strptime(entrada2, '%d/%m/%Y')
 
-data_validada = True
-
-#print(numero_tickets['Incidente - ITSM.Número do incidente'])
+data_validada = False
 
 #------------------------------------------------------------------------------------------------------------------------
                                     #LEITURA DOS TICKETS DA PLANILHA PARA E USO DO SELENIUM
 
-for index,row in numero_tickets[1:].iterrows():  #Loop que indica o número de repetições que o navegador deve ser aberto e fechado
-    #data_compara = datetime.strptime(str(row['Incidente - ITSM.Fechado em_1'])[0:10], '%d/%m/%Y')
+for index,row in numero_tickets.iterrows():  #Loop que indica o número de repetições que o navegador deve ser aberto e fechado
+    data_compara = datetime.strptime(row['Incidente - ITSM.Fechado em_1'][0:10], '%d/%m/%Y')
     
     if data_validada == False:
-        # if str(row['Incidente - ITSM.Fechado em_1'])[0:10] == entrada:
-        #     data_validada = True
-        print('salve')
+        if str(row['Incidente - ITSM.Fechado em_1'])[0:10] == entrada:
+            data_validada = True
             
-    # elif data_compara > entrada2_data:
-    #     break
+    elif data_compara > entrada2_data:
+        break
 
     else:
         tickets_detro_data.append(row['Incidente - ITSM.Número do incidente'])
@@ -174,7 +173,7 @@ for index,row in numero_tickets[1:].iterrows():  #Loop que indica o número de r
                 tabela_existe = chrome.find_elements(By.XPATH, '//*[@id="manual"]/table/tbody')
                 elemento_estacao = chrome.find_element(By.XPATH,'//*[@id="content"]/table/tbody/tr[1]/td[2]' ) #busca estacao no navegador
                 estacao = elemento_estacao.get_attribute('innerHTML')
-                if len(tabela_existe) > 0 and estacao != " ": #para o loop quando a tabela for carregada
+                if len(tabela_existe) > 0: #para o loop quando a tabela for carregada
                     break
             
         
