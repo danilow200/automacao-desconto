@@ -180,7 +180,7 @@ dataf = {
     'Porcetagem RADIANTE': categoria_porcetagem_rad
 }
 
-df2 = pd.DataFrame(dataf, dtype=float)
+df2 = pd.DataFrame(dataf)
 df = pd.DataFrame(data)
 #------------------------------------------------------------------------------------------------------------------------
                                     #SALVANDO NO EXCEL E ESTILIZANDO

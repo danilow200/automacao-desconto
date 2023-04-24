@@ -30,7 +30,7 @@ def gerar_grafico(nome_arquivo):
     chart.y_axis.title = 'Porcetagem'
 
     categorias = Reference(worksheet, min_col=2, min_row=4, max_row=11)
-    valores = Reference(worksheet, min_col=7, min_row=4, max_row=11)
+    valores = Reference(worksheet, min_col=7, min_row=3, max_row=11)
     chart.add_data(valores, titles_from_data=True)
     chart.set_categories(categorias)
     chart.legend = None
@@ -44,7 +44,7 @@ def gerar_grafico(nome_arquivo):
     chart_2.y_axis.title = 'Porcetagem'
 
     categorias = Reference(worksheet, min_col=2, min_row=4, max_row=11)
-    valores = Reference(worksheet, min_col=8, min_row=4, max_row=11)
+    valores = Reference(worksheet, min_col=8, min_row=3, max_row=11)
     chart_2.add_data(valores, titles_from_data=True)
     chart_2.set_categories(categorias)
     chart_2.legend = None
