@@ -92,7 +92,7 @@ codigo_auto = []
 
 #Site da Telebras e Planilha que será analisada
 url_logs = "https://report.telebras.com.br/scripts/get_incidentes.php" # variável que armazena o link do site que vamos pesquisar
-nome_do_arquivo = '12382.csv' #armazenando o nome da planilha em uma variável
+nome_do_arquivo = '.\\planilhas\\12382.csv' #armazenando o nome da planilha em uma variável
 
 
 #------------------------------------------------------------------------------------------------------------------------
@@ -337,7 +337,7 @@ data3 = {
 }
 df3 = pd.DataFrame(data3)
 
-with pd.ExcelWriter('querry builder consulta teste.xlsx', engine='xlsxwriter') as writer: #utilizando do Writer para fazer um arquivo com mais de duas páginas
+with pd.ExcelWriter('.\\planilhas\\querry builder consulta teste.xlsx', engine='xlsxwriter') as writer: #utilizando do Writer para fazer um arquivo com mais de duas páginas
     df.to_excel(writer, sheet_name='Codigos Geral', index = False)
     df2.to_excel(writer, sheet_name='Codigos com desconto automatico', index = False)
     df3.to_excel(writer, sheet_name='Tickets dentro da data', index = False)
