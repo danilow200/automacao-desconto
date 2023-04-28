@@ -260,7 +260,7 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
 #------------------------------------------------------------------------------------------------------------------------
             #ANALISA SEGUNDA TABELA EM BUSCA PARA APLICAR DESCONTOS QUE NÃO FOI POSSIVEL APENAS COM A PRIMEIRA TABELA
                             
-        if ultima_entrada[5:11]  == '$IPFE#' or ultima_entrada[5:11] =='$IPFR#':
+        if ultima_entrada[5:11]  == '$IPFE#':
             tickets_codigo.append(row['Unnamed: 0']) #jogar no array o número do ticket
             codigo_codigos.append('Fechamento junto com a ocorrencia') #se o string codigo receber algo diferente de vazio, ou seja, receber texto. Ai o array recebe a string
             estacao_codigos.append(estacao) #salva em qual estação ocorreu
@@ -273,13 +273,13 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
             empresa_codigos.append(nome_empresa(ultima_entrada[0:5]))
             data1 = datetime.strptime(data_codigos[cont2 - 1], '%d/%m/%Y %H:%M')
             valida = True
-            if ultima_entrada[5:11]  == '$IPFE#':
-                for index_tabela3,row_tabela3 in reversed(list(pd_tabela_2.iterrows())):
-                    if row_tabela3['Categoria'] == 'Direcionamento da Solicitação':
-                        data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], '%d/%m/%Y %H:%M')
-                        if data2 > data1:
-                            data_codigos.append(pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16])
-                            valida = False
+            
+            for index_tabela3,row_tabela3 in reversed(list(pd_tabela_2.iterrows())):
+                if row_tabela3['Categoria'] == 'Direcionamento da Solicitação':
+                    data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], '%d/%m/%Y %H:%M')
+                    if data2 > data1:
+                        data_codigos.append(pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16])
+                        valida = False
             if valida:
                 data_codigos.append(pd_tabela_2['Informações da ocorrência'][0][0:16]) #salva data da ocorrencia
                 data2 = datetime.strptime(data_codigos[cont2], '%d/%m/%Y %H:%M')
@@ -298,6 +298,42 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                     
             possui_par.append(par_correto(par))
             cont2 += 1
+
+
+        if ultima_entrada[5:11]  == '$IPFR#':
+            for index_tabela3,row_tabela3 in pd_tabela_2.iterrows():
+                if row_tabela3['Categoria'] == 'Solicitação Restaurada':
+                    data1 = datetime.strptime(row_tabela3['Informações da ocorrência'][0:16], '%d/%m/%Y %H:%M')
+                    data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][0][0:16], '%d/%m/%Y %H:%M')
+                    for i in range(2):
+                        tickets_codigo.append(row['Unnamed: 0']) #jogar no array o número do ticket
+                        codigo_codigos.append('Solicitação Restaurada') #se o string codigo receber algo diferente de vazio, ou seja, receber texto. Ai o array recebe a string
+                        estacao_codigos.append(estacao) #salva em qual estação ocorreu
+                        categoria_codigos.append('Falha Restabelecida')
+                        possui_par.append('Possui')
+                        if estacao[0] == ' ':
+                            estado_codigos.append(estacao[1:3])
+                        else:
+                            estado_codigos.append(estacao[0:2]) #salva qual estado pertence a estacao
+                        empresa_codigos.append(nome_empresa(ultima_entrada[0:5])) #achar outra solução
+                    tipo_codigos.append('abertura')
+                    tipo_codigos.append('fechamento')
+                    data_codigos.append(pd_tabela_2['Informações da ocorrência'][0][0:16])
+                    data_codigos.append(row_tabela3['Informações da ocorrência'][0:16])
+                    cont2 += 1
+
+                    data_abertura.append(data_codigos[cont2 - 1])
+                    data_fechamento.append(data_codigos[cont2])
+                    diferenca = data2 - data1 #calcula o desconto
+                    desconto_abertura.append('Solicitação Restaurada Abertura')
+                    desconto_fechamento.append('Solicitação Restaurada Fechamento')
+                    diferenca_str = strfdelta(diferenca, "{hours:02d}:{minutes:02d}:{seconds:02d}")
+                    desconto_auto.append(diferenca_str)
+                    tickets_auto.append(row['Unnamed: 0'])
+                    codigo_auto.append('Falha Restabelecida')
+                    empresa_auto.append(nome_empresa(ultima_entrada[0:5]))
+                    cont2 += 1
+                    break
                         
         chrome.quit #fecha o chrome após terminar a operação desejada
         

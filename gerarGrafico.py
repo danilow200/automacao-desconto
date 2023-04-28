@@ -13,7 +13,7 @@ def gerar_grafico(nome_arquivo):
 
     for row in worksheet.iter_rows(min_col=7, min_row=4, max_row=11):
         for cell in row:
-            cell.number_format = FORMAT_PERCENTAGE_00
+            cell.number_format = FORMAT_PERCENTAGE_00 #converte float para porcetagem
 
     for row in worksheet.iter_rows(min_col=8, min_row=4, max_row=11):
         for cell in row:
@@ -21,7 +21,7 @@ def gerar_grafico(nome_arquivo):
 
     for row in worksheet.iter_rows(min_col=3,max_col=6, min_row=4, max_row=11):
         for cell in row:
-            cell.number_format = FORMAT_DATE_TIME6
+            cell.number_format = FORMAT_DATE_TIME6 #converte string para HH:MM:SS
 
     chart = BarChart()
     chart.type = 'col'

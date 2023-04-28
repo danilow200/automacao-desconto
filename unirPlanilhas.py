@@ -3,6 +3,9 @@ from EstilizandoExcel import estilizar_excel
 from gerarGrafico import gerar_grafico
 import shutil
 
+#------------------------------------------------------------------------------------------------------------------------
+                                            #FUNÇÕES
+
 def mescla(x, y):
     x = x.drop(columns=['Unnamed: 0'])
     x = x.drop(index=range(0,1),axis=0)
@@ -39,6 +42,9 @@ def calculate_time_percentage(time1, time2):
     percentage = total_seconds2 / total_seconds1
     return percentage
 
+#------------------------------------------------------------------------------------------------------------------------
+                                            #DICIONARIOS
+
 categoria_dicionario = {
                     '0': 'Acesso', 
                     '1': 'Aguardando CIGR',
@@ -49,6 +55,9 @@ categoria_dicionario = {
                     '6': 'Outros',
                     '7': 'Terceiros'
                 }
+
+#------------------------------------------------------------------------------------------------------------------------
+                                            #VARIAVEIS
 
 categorias = ["Falha Restabelecida", "Acesso", "Aguardando CIGR", "Terceiros", "Área de Risco", "Falta de Energia", "Outros", "Atividade Agendada"]
 categoria_soma_dada_pad = {categoria: '00:00:00' for categoria in categorias}
@@ -75,6 +84,9 @@ arquivo_entrada = '.\\planilhas\\'
 arquivo_entrada += input('insira o nome do arquivo\n')
 arquivo_entrada += '.xlsx'
 
+#------------------------------------------------------------------------------------------------------------------------
+                                            #MESCLA AS PLANILHAS
+
 for nome in lista_paginas: 
     mes.append(pd.read_excel(mes_arquivo, sheet_name=nome))
     nova_entrada.append(pd.read_excel(arquivo_entrada, sheet_name=nome))
@@ -83,13 +95,15 @@ nova_df_p1 = mescla(mes[0], nova_entrada[0])
 nova_df_p2 = mescla(mes[1], nova_entrada[1])
 nova_df_p3 = mescla(mes[2], nova_entrada[2])
 
+# Retira cabeçalho e linha em branco da planilha
 mes[3] = mes[3].drop(columns=['Unnamed: 0'])
 mes[3] = mes[3].drop(index=range(0,1),axis=0)
-# mes[3].columns = mes[3].iloc[0]
 
 nova_entrada[3] = nova_entrada[3].drop(columns=['Unnamed: 0'])
 nova_entrada[3] = nova_entrada[3].drop(index=range(0,1),axis=0)
-# nova_entrada[3].columns = nova_entrada[3].iloc[0]
+
+#------------------------------------------------------------------------------------------------------------------------
+                                    #GERA NOVA TABELA COM O TOTAL DE HORAS
 
 cont = 2
 
@@ -103,6 +117,9 @@ for categoria in categorias:
 for index in categorias:
     categoria_porcetagem_pad[index] = calculate_time_percentage(categoria_soma_dada_pad[index], categoria_soma_auto_pad[index] )
     categoria_porcetagem_rad[index] = calculate_time_percentage(categoria_soma_dada_rad[index], categoria_soma_auto_rad[index] )
+
+#------------------------------------------------------------------------------------------------------------------------
+                                            #CRIA ARQUIVO EXCEL
 
 dataf = {
     'Desconto Dado Total PADTEC': categoria_soma_dada_pad,

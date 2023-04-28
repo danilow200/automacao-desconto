@@ -60,7 +60,8 @@ categoria_dicionario = {
                     'IPFR': 'Falha Restabelecida',
                     'IPFE': 'Falta de Energia',
                     'IPOS': 'Outros',
-                    'IPTS': 'Terceiros'
+                    'IPTS': 'Terceiros',
+                    'taçã': 'Falha Restabelecida'
                 }
 
 float_format = {'Porcetagem PADTEC': '%.2f%%', 'Porcetagem RADIANTE': '%.2f%%'}
