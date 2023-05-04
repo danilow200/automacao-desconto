@@ -151,7 +151,9 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
         
         elemento_ticket = chrome.find_element(By.XPATH,'//*[@id="filter-box"]')  #"encontra" o campo de preenchimento de ticket
         elemento_ticket.send_keys(row['Unnamed: 0']) #cola o número do ticket no campo
-        elemento_botao = chrome.find_element(By.XPATH,'//*[@id="filter-clear"]').click() #encontra e depois clica no botão "enviar"
+        elemento_botao = chrome.find_element(By.XPATH,'//*[@id="filter-box"]')
+        # Simula o pressionamento da tecla "Enter"
+        elemento_botao.send_keys(Keys.RETURN)
         
         print(row['Unnamed: 0']) #prita no terminal o ticket atual
 

@@ -104,6 +104,9 @@ numero_tickets = numero_tickets.reset_index().rename(columns={'index': 'num_linh
 numero_tickets.iloc[:, 1:] = numero_tickets.iloc[:, 0:-1].values
 #numero_tickets = numero_tickets.drop(index=range(0,2),axis=0)
 numero_tickets = numero_tickets.drop_duplicates(subset=['Incidente - ITSM.Número do incidente']) #exclui as linhas com números de tickets duplicados
+#numero_tickets = numero_tickets.dropna(subset=['Incidente - ITSM.Número do incidente do pai'])
+numero_tickets = numero_tickets[numero_tickets['Incidente - ITSM.Número do incidente do pai'] == ' ']
+print(numero_tickets['Incidente - ITSM.Número do incidente do pai'])
 #após isso, a tabela passa a ter o número de linhas e colunas que sobraram.
 
 cont2 = 0 #contador da posição data para uso do calculo do desconto
@@ -153,7 +156,9 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
         
         elemento_ticket = chrome.find_element(By.XPATH,'//*[@id="filter-box"]')  #"encontra" o campo de preenchimento de ticket
         elemento_ticket.send_keys(row['Incidente - ITSM.Número do incidente']) #cola o número do ticket no campo
-        elemento_botao = chrome.find_element(By.XPATH,'//*[@id="filter-clear"]').click() #encontra e depois clica no botão "enviar"
+        elemento_botao = chrome.find_element(By.XPATH,'//*[@id="filter-box"]')
+        # Simula o pressionamento da tecla "Enter"
+        elemento_botao.send_keys(Keys.RETURN)
         
         print(row['Incidente - ITSM.Número do incidente']) #prita no terminal o ticket atual
 
