@@ -87,7 +87,7 @@ categoria_porcetagem_pad = {categoria: '00:00:00' for categoria in categorias}
 categoria_porcetagem_rad = {categoria: '00:00:00' for categoria in categorias}
 
 arquivo_desconto_auto = ".\\planilhas\\descontos abril.xlsx"
-arquivo_desconto_dado = ".\\planilhas\\Indicadores - Abril.xlsx"
+arquivo_desconto_dado = ".\\planilhas\\Indicadores - Maio.xlsx"
 #------------------------------------------------------------------------------------------------------------------------
                                             #LENDO ARQUIVOS EXCEL
 desconto_auto_planilha = pd.read_excel(arquivo_desconto_auto,sheet_name='Codigos com desconto automatico')

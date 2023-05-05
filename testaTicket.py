@@ -92,7 +92,7 @@ codigo_auto = []
 
 #Site da Telebras e Planilha que será analisada
 url_logs = "https://report.telebras.com.br/scripts/get_incidentes.php" # variável que armazena o link do site que vamos pesquisar
-nome_do_arquivo = '.\\planilhas\\Indicadores - Abril.xlsx' #armazenando o nome da planilha em uma variável
+nome_do_arquivo = '.\\planilhas\\Indicadores - Maio.xlsx' #armazenando o nome da planilha em uma variável
 
 
 #------------------------------------------------------------------------------------------------------------------------
