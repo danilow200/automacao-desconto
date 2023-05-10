@@ -20,7 +20,7 @@ chrome_options.add_argument("--disable-extensions")  # Desativa as extensões do
 chrome_options.add_argument("--disable-gpu")  # Desativa a aceleração de hardware
 chrome_options.add_argument("--disable-dev-shm-usage")  # Desativa o uso compartilhado de memória /tmp
 chrome_options.add_argument("--no-sandbox")  # Desativa o sandbox do Chrome
-chrome_options.add_argument("--force-device-scale-factor=0.75")  # Define o zoom em 25%
+chrome_options.add_argument("--force-device-scale-factor=0.25")  # Define o zoom em 25%
 #chrome_options.add_argument('--headless')
 
 while True:
@@ -58,9 +58,8 @@ cont = 1
 
 for index,row in pd_tabela.iterrows(): 
     data_descont_atual = datetime.strptime(row['Solicitação'][0:10], '%Y-%m-%d')
-    if(data_descont_atual <= entra_convertida and row['Status'] == 'pendente'):
-        #if row['Solicitante'] == 'doliveira.padtec':
-        driver.find_element(By.XPATH, f'//*[@id="descontos_panel"]/tbody/tr[{index + 1}]/td[1]/a').click()
+    if(data_descont_atual <= entra_convertida and row['Status'] == 'pendente' and row['Solicitante'] == 'danilo.silva'):
+        driver.find_element(By.XPATH, f'//*[@id="descontos_panel"]/tbody/tr[{cont}]/td[1]/a').click()
         time.sleep(2)
         driver.find_element(By.CSS_SELECTOR, 'button.aprovar.ui-button.ui-corner-all.ui-widget.ui-button-icon-only').click()
         #driver.find_element(By.CSS_SELECTOR, 'button.lixeira.ui-button.ui-corner-all.ui-widget.ui-button-icon-only').click()

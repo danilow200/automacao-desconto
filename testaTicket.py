@@ -141,7 +141,7 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
     elif data_compara > entrada2_data:
         break
 
-    else:
+    if data_validada:
         tickets_detro_data.append(row['Unnamed: 0'])
         options = webdriver.ChromeOptions()
         options.add_argument("--headless") #define para o chrome abrir em segundo plano
@@ -320,8 +320,8 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                         empresa_codigos.append(nome_empresa(ultima_entrada[0:5])) #achar outra solução
                     tipo_codigos.append('abertura')
                     tipo_codigos.append('fechamento')
-                    data_codigos.append(pd_tabela_2['Informações da ocorrência'][0][0:16])
                     data_codigos.append(row_tabela3['Informações da ocorrência'][0:16])
+                    data_codigos.append(pd_tabela_2['Informações da ocorrência'][0][0:16])
                     cont2 += 1
 
                     data_abertura.append(data_codigos[cont2 - 1])

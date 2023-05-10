@@ -76,7 +76,7 @@ lista_paginas = [
 mes = []
 nova_entrada = []
 
-mes_arquivo = '.\\planilhas\\abril.xlsx'
+mes_arquivo = '.\\planilhas\\maio.xlsx'
 mes_arquivo_copia = mes_arquivo[:-5]
 mes_arquivo_copia += ' - copia.xlsx'
 
