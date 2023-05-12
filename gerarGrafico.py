@@ -25,9 +25,9 @@ def gerar_grafico(nome_arquivo):
 
     chart = BarChart()
     chart.type = 'col'
-    chart.title = 'Porcetagem PADTEC'
+    chart.title = 'Porcentagem PADTEC'
     chart.x_axis.title = 'Categorias'
-    chart.y_axis.title = 'Porcetagem'
+    chart.y_axis.title = 'Porcentagem'
 
     categorias = Reference(worksheet, min_col=2, min_row=4, max_row=11)
     valores = Reference(worksheet, min_col=7, min_row=3, max_row=11)
@@ -39,9 +39,9 @@ def gerar_grafico(nome_arquivo):
 
     chart_2 = BarChart()
     chart_2.type = 'col'
-    chart_2.title = 'Porcetagem RADIANTE'
+    chart_2.title = 'Porcentagem RADIANTE'
     chart_2.x_axis.title = 'Categorias'
-    chart_2.y_axis.title = 'Porcetagem'
+    chart_2.y_axis.title = 'Porcentagem'
 
     categorias = Reference(worksheet, min_col=2, min_row=4, max_row=11)
     valores = Reference(worksheet, min_col=8, min_row=3, max_row=11)
