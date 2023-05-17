@@ -282,7 +282,7 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                     data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], '%d/%m/%Y %H:%M')
                     if data2 > data1:
                         insere_codigo(row['Unnamed: 0'], texto, pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')
-                        insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], ultima_entrada)
+                        insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], ultima_entrada, 'Fechamento junto com a ocorrencia')
                         valida = False
             if valida:
                 insere_codigo(row['Unnamed: 0'], texto, pd_tabela_2['Informações da ocorrência'][0][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')

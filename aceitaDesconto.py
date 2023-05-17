@@ -3,11 +3,10 @@ from selenium import webdriver #importando o nevagador
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
-import re
 
 def converte_data(data):
     dia, mes, ano = data.split('/')
@@ -23,13 +22,13 @@ chrome_options.add_argument("--no-sandbox")  # Desativa o sandbox do Chrome
 chrome_options.add_argument("--force-device-scale-factor=0.75")  # Define o zoom em 25%
 #chrome_options.add_argument('--headless')
 
-while True:
-    entrada = input('Digite a data de entrada no formato dia/mes/ano:\n')
-    pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
-    if pattern.match(entrada):
-        break
+# while True:
+#     entrada = input('Digite a data de entrada no formato dia/mes/ano:\n')
+#     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
+#     if pattern.match(entrada):
+#         break
 
-entra_convertida = datetime.strptime(converte_data(entrada), '%Y-%m-%d')
+# entra_convertida = datetime.strptime(converte_data(entrada), '%Y-%m-%d')
 
 driver = webdriver.Chrome(options=chrome_options)
 
@@ -58,7 +57,7 @@ cont = 1
 
 for index,row in pd_tabela.iterrows(): 
     data_descont_atual = datetime.strptime(row['Solicitação'][0:10], '%Y-%m-%d')
-    if(data_descont_atual <= entra_convertida and row['Status'] == 'pendente' and row['Solicitante'] == 'danilo.silva'):
+    if(row['Status'] == 'pendente' and row['Solicitante'] == 'danilo.silva'):
         driver.find_element(By.XPATH, f'//*[@id="descontos_panel"]/tbody/tr[{cont}]/td[1]/a').click()
         time.sleep(2)
         driver.find_element(By.CSS_SELECTOR, 'button.aprovar.ui-button.ui-corner-all.ui-widget.ui-button-icon-only').click()
