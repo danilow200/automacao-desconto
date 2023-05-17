@@ -164,6 +164,7 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
         tickets_detro_data.append(row['Unnamed: 0'])
         options = webdriver.ChromeOptions()
         options.add_argument("--headless") #define para o chrome abrir em segundo plano
+        # options.add_argument("--force-device-scale-factor=0.75")  # Define o zoom em 75%
         chrome = webdriver.Chrome(executable_path='chromedriver.exe', chrome_options=options) #cria uma instância do chrome
         chrome.get(url_logs)#navega para essa url do chrome    
         time.sleep(1) #Delay 
@@ -353,7 +354,7 @@ data3 = {
 }
 df3 = pd.DataFrame(data3)
 
-with pd.ExcelWriter('.\\planilhas\\descontos abril.xlsx', engine='xlsxwriter') as writer: #utilizando do Writer para fazer um arquivo com mais de duas páginas
+with pd.ExcelWriter('.\\planilhas\\descontos.xlsx', engine='xlsxwriter') as writer: #utilizando do Writer para fazer um arquivo com mais de duas páginas
     df.to_excel(writer, sheet_name='Codigos Geral', index = False)
     df2.to_excel(writer, sheet_name='Codigos com desconto automatico', index = False)
     df3.to_excel(writer, sheet_name='Tickets dentro da data', index = False)

@@ -20,7 +20,7 @@ chrome_options.add_argument("--disable-extensions")  # Desativa as extensões do
 chrome_options.add_argument("--disable-gpu")  # Desativa a aceleração de hardware
 chrome_options.add_argument("--disable-dev-shm-usage")  # Desativa o uso compartilhado de memória /tmp
 chrome_options.add_argument("--no-sandbox")  # Desativa o sandbox do Chrome
-chrome_options.add_argument("--force-device-scale-factor=0.25")  # Define o zoom em 25%
+chrome_options.add_argument("--force-device-scale-factor=0.75")  # Define o zoom em 25%
 #chrome_options.add_argument('--headless')
 
 while True:
@@ -37,7 +37,7 @@ driver.get('https://report.telebras.com.br/pages/tickets/tickets.php')
 driver.add_cookie({'name': 'PHPSESSID', 'value': '578a030e15574ea6c89b3b77590e9353'})
 driver.refresh()
 
-time.sleep(4)
+time.sleep(1)
 
 driver.find_element(By.XPATH,'//*[@id="container"]/a').click()
 time.sleep(1)

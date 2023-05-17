@@ -34,7 +34,7 @@ linha = input('Começa em qual linha\n')
 linha = int(linha) - 2
 # Exclui linhas e colunas extras
 planilha = planilha.drop(index=range(0,linha),axis=0)
-print(planilha)
+#print(planilha)
 
 # Adiciona os tickets com descontos para um array de descontos utilizando a classe Desconto para estrutura-lo correntamente
 for index,row in planilha.iterrows():
