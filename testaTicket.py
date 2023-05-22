@@ -296,10 +296,10 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
             possui_par.append(par_correto(par))
             cont2 += 1
 
-
+        valida_categoria = False
         if ultima_entrada[5:11]  == '$IPFR#':
-            for index_tabela3,row_tabela3 in pd_tabela_2.iterrows():
-                if row_tabela3['Categoria'] == 'Solicitação Restaurada':
+            for index_tabela3,row_tabela3 in reversed(list(pd_tabela_2.iterrows())):
+                if valida_categoria == False and row_tabela3['Categoria'] == 'Solicitação Restaurada':
                     for i in range(2):
                         possui_par.append('Possui')
                         if estacao[0] == ' ':
@@ -308,10 +308,13 @@ for index,row in numero_tickets.iterrows():  #Loop que indica o número de repet
                             estado_codigos.append(estacao[0:2]) #salva qual estado pertence a estacao
                         empresa_codigos.append(nome_empresa(ultima_entrada[0:5])) #achar outra solução
                     insere_codigo(row['Unnamed: 0'], 'Solicitação Restaurada', row_tabela3['Informações da ocorrência'][0:16], estacao, 'Falha Restabelecida', 'Abertura')
-                    insere_codigo(row['Unnamed: 0'], 'Solicitação Restaurada', pd_tabela_2['Informações da ocorrência'][0][0:16], estacao, 'Falha Restabelecida', 'Fechamento')
                     cont2 += 1
-
-                    insere_data_desconto(row_tabela3['Informações da ocorrência'][0:16], pd_tabela_2['Informações da ocorrência'][0][0:16], 'Solicitação Restaurada Abertura', 'Solicitação Restaurada Fechamento')
+                    valida_categoria = True
+                    salva_info = row_tabela3['Informações da ocorrência'][0:16]
+                    
+                if valida_categoria and row_tabela3['Categoria'] == 'Ocorrências: Direcionamento da tarefa Fechar para o grupo N1':
+                    insere_codigo(row['Unnamed: 0'], 'Direcionamento da tarefa Fechar para o grupo N1', pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], estacao, 'Falha Restabelecida', 'Fechamento')
+                    insere_data_desconto(salva_info, pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], 'Solicitação Restaurada', 'Direcionamento da tarefa Fechar para o grupo N1')
                     tickets_auto.append(row['Unnamed: 0'])
                     codigo_auto.append('Falha Restabelecida')
                     empresa_auto.append(nome_empresa(ultima_entrada[0:5]))
