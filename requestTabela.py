@@ -18,32 +18,34 @@ class Desconto:
         self.fim = fim
         self.categoria = categoria
 
-descontos = []
+def manu_desconto():
 
-# Abri a planilha solicitada
-entrada = input('Digite o número da planinha desejada:\n1 - PADTEC\n2 - RADIANTE\n')
-if int(entrada) == 1:
-    empresa = 'PADTEC'
-else:
-    empresa = 'RADIANTE'
+    descontos = []
 
-nome_do_arquivo = f'.\\planilhas\\Solicitação de Descontos {empresa}.xlsx'
+    # Abri a planilha solicitada
+    entrada = input('Digite o número da planinha desejada:\n1 - PADTEC\n2 - RADIANTE\n')
+    if int(entrada) == 1:
+        empresa = 'PADTEC'
+    else:
+        empresa = 'RADIANTE'
 
-planilha = pd.read_excel(nome_do_arquivo,sheet_name='Planilha1')
-linha = input('Começa em qual linha\n')
-linha = int(linha) - 2
-# Exclui linhas e colunas extras
-planilha = planilha.drop(index=range(0,linha),axis=0)
-#print(planilha)
+    nome_do_arquivo = f'.\\planilhas\\Solicitação de Descontos {empresa}.xlsx'
 
-# Adiciona os tickets com descontos para um array de descontos utilizando a classe Desconto para estrutura-lo correntamente
-for index,row in planilha.iterrows():
-    descontos.append(Desconto("descontos", row[empresa], row['Unnamed: 10'], converter_data(str(row["Unnamed: 4"])), converter_data(str(row["Unnamed: 5"])), row["Unnamed: 3"]))
+    planilha = pd.read_excel(nome_do_arquivo,sheet_name='Planilha1')
+    linha = input('Começa em qual linha\n')
+    linha = int(linha) - 2
+    # Exclui linhas e colunas extras
+    planilha = planilha.drop(index=range(0,linha),axis=0)
+    #print(planilha)
 
-# # Roda o array de descontos e faz a solicitação de desconto
-for i in descontos:
-    url = "https://report.telebras.com.br/pages/tickets/control.php?insert=" + i.insert + '&ticket=' + str(i.ticket) + '&observacao=' + i.observacao + '&inicio=' + i.inicio + '&fim=' + i.fim + '&categoria=' + i.categoria
-    payload={} 
-    headers = { 'Cookie': 'PHPSESSID=578a030e15574ea6c89b3b77590e9353'} 
-    response = requests.request("POST", url, headers=headers, data=payload) 
-    print(response.text)
+    # Adiciona os tickets com descontos para um array de descontos utilizando a classe Desconto para estrutura-lo correntamente
+    for index,row in planilha.iterrows():
+        descontos.append(Desconto("descontos", row[empresa], row['Unnamed: 10'], converter_data(str(row["Unnamed: 4"])), converter_data(str(row["Unnamed: 5"])), row["Unnamed: 3"]))
+
+    # # Roda o array de descontos e faz a solicitação de desconto
+    for i in descontos:
+        url = "https://report.telebras.com.br/pages/tickets/control.php?insert=" + i.insert + '&ticket=' + str(i.ticket) + '&observacao=' + i.observacao + '&inicio=' + i.inicio + '&fim=' + i.fim + '&categoria=' + i.categoria
+        payload={} 
+        headers = { 'Cookie': 'PHPSESSID=578a030e15574ea6c89b3b77590e9353'} 
+        response = requests.request("POST", url, headers=headers, data=payload) 
+        print(response.text)
