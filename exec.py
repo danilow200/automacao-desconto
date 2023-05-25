@@ -4,20 +4,33 @@ from testRequest import auto_request
 from aceitaDesconto import aceita_auto
 from requestTabela import manu_desconto
 import PySimpleGUI as sg
+from PySimpleGUI import Column, VSeparator
 import re
 
 sg.theme('SystemDefault')
 
-layout = [
-    [sg.Text('Informe a função desejada')],
+layout_esquerdo = [
+    [sg.Image('./assets/logo.png')]
+]
+
+layout_direito = [
+    [sg.Push(), sg.Text('Informe a função desejada', font=("Helvetica", 10, "bold")), sg.Push()],
     [sg.Radio('Gerar planilha de desconto automático', "RADIO1", default=False, key="-IN1-"), sg.Push()],
     [sg.Radio('Aplicar desconto automático', "RADIO1", default=False, key="-IN2-"), sg.Push()],
     [sg.Radio('Desconto manual', "RADIO1", default=False, key="-IN3-"), sg.Push()],
-    [sg.Push(), sg.Button('Proximo', size=(10,1), button_color=('white', '#28478E'),border_width=0), sg.Push()]
+    [sg.Push(), sg.Button('Proximo', size=(10,1), button_color=('white', '#28478E'),border_width=0)]
+]
+
+layout = [
+    [
+        Column(layout_esquerdo),
+        VSeparator(),
+        Column(layout_direito)
+    ]
 ]
 
 layout_planilha = [
-    [sg.Text('Gerar planilha de desconto automático')],
+    [sg.Text('Gerar planilha de desconto automático', font=("Helvetica", 10, "bold"))],
     [sg.Text('Informe o mês da planilha de Indiacadores'), sg.Push(),sg.Input(key='-PLANILHA_MES-')],
     [sg.Text('Digite a data de entrada no formato dia/mes/ano'), sg.Push(), sg.Input(key='-PLANILHA_INICIO-')],
     [sg.Text('Digite a ultima data de entrada no formato dia/mes/ano'), sg.Push(), sg.Input(key='-PLANILHA_FIM-')],
@@ -26,13 +39,13 @@ layout_planilha = [
 ]
 
 layout_auto = [
-    [sg.Text('Aplicar Desconto Automático')],
+    [sg.Text('Aplicar Desconto Automático', font=("Helvetica", 10, "bold"))],
     [sg.Text('Informe o nome da planilha com os descontos'), sg.Push(),sg.Input(key='-AUTO_PLANILHA-')],
     [sg.Push(), sg.Button('Aplicar', size=(20,1), button_color=('white', '#28478E'),border_width=0)]
 ]
 
 layout_manu = [
-    [sg.Text('Aplicar Desconto Manual')],
+    [sg.Text('Aplicar Desconto Manual', font=("Helvetica", 10, "bold"))],
     [sg.Push()],
     [sg.Text('Escolha a empresa da planilha'), sg.Push() ,sg.Radio('PADTEC', "RADIO1", default=True, key="-MANU_PAD-"), sg.Push(),sg.Radio('RADIANTE', "RADIO1", default=False, key="-MANU_RAD-")],
     [sg.Text('Informe a linha que inicia os novos descontos'), sg.Push(),sg.Input(key='-MANU_LINHA-', size=(36, 1))],
@@ -42,25 +55,29 @@ layout_manu = [
 window = sg.Window(
     'Tela de seleção',
     layout=layout,
-    element_justification='c'
+    element_justification='c',
+    icon='./assets/icontelebras_resized.ico'
 )
 
 window_planilha = sg.Window(
     'Gerar planilha de desconto automático',
     layout=layout_planilha,
-    element_justification='c'
+    element_justification='c',
+    icon='./assets/icontelebras_resized.ico'
 )
 
 window_auto = sg.Window(
     'Aplicar Desconto Automático',
     layout=layout_auto,
-    element_justification='c'
+    element_justification='c',
+    icon='./assets/icontelebras_resized.ico'
 )
 
 window_manu = sg.Window(
     'Aplicar Desconto Manual',
     layout=layout_manu,
-    element_justification='c'
+    element_justification='c',
+    icon='./assets/icontelebras_resized.ico'
 )
 
 while True:
