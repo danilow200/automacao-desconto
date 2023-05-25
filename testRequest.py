@@ -11,12 +11,12 @@ class Desconto:
         self.fim = fim
         self.categoria = categoria
 
-def auto_request():
+def auto_request(nome_arquivo):
 
     descontos = []
 
     # Abri a planilha solicitada
-    nome_do_arquivo = '.\\planilhas\\' + input('Insira o nome da planilha\n') + '.xlsx'
+    nome_do_arquivo = '.\\planilhas\\' + nome_arquivo + '.xlsx'
 
     planilha = pd.read_excel(nome_do_arquivo,sheet_name='Codigos com desconto automatico')
     # Exclui linhas e colunas extras

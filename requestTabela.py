@@ -18,13 +18,12 @@ class Desconto:
         self.fim = fim
         self.categoria = categoria
 
-def manu_desconto():
+def manu_desconto(entrada, linha):
 
     descontos = []
 
     # Abri a planilha solicitada
-    entrada = input('Digite o número da planinha desejada:\n1 - PADTEC\n2 - RADIANTE\n')
-    if int(entrada) == 1:
+    if entrada == 1:
         empresa = 'PADTEC'
     else:
         empresa = 'RADIANTE'
@@ -32,7 +31,6 @@ def manu_desconto():
     nome_do_arquivo = f'.\\planilhas\\Solicitação de Descontos {empresa}.xlsx'
 
     planilha = pd.read_excel(nome_do_arquivo,sheet_name='Planilha1')
-    linha = input('Começa em qual linha\n')
     linha = int(linha) - 2
     # Exclui linhas e colunas extras
     planilha = planilha.drop(index=range(0,linha),axis=0)

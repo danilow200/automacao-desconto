@@ -51,7 +51,7 @@ def calculate_time_percentage(time1, time2):
     percentage = total_seconds2 / total_seconds1
     return percentage
 
-def compara_codigo():
+def compara_codigo(nome_arquivo):
     #------------------------------------------------------------------------------------------------------------------------
                                                 #DICIONARIOS
     categoria_dicionario = {
@@ -188,7 +188,7 @@ def compara_codigo():
     #------------------------------------------------------------------------------------------------------------------------
                                         #SALVANDO NO EXCEL E ESTILIZANDO
     novo_arquivo = '.\\planilhas\\'
-    novo_arquivo += input("Digite o nome para a planilha\n")
+    novo_arquivo += nome_arquivo
     novo_arquivo += ".xlsx"
 
     shutil.copy(arquivo_desconto_auto, novo_arquivo)

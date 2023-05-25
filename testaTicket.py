@@ -37,7 +37,7 @@ def par_correto(x):
     else:
         return "Não possui"
 
-def ler_indicadores():
+def ler_indicadores(mes, data_inicio, data_fim):
     #------------------------------------------------------------------------------------------------------------------------
                                                 #DICIONARIOS
 
@@ -92,8 +92,8 @@ def ler_indicadores():
 
     #Site da Telebras e Planilha que será analisada
     url_logs = "https://report.telebras.com.br/scripts/get_incidentes.php" # variável que armazena o link do site que vamos pesquisar
-    mes_arquivo = input('Informe o mês da planilha de Indiacadores\n')
-    nome_do_arquivo = '.\\planilhas\\Indicadores - ' + mes_arquivo.capitalize() + '.xlsx' #armazenando o nome da planilha em uma variável
+    # mes_arquivo = input('Informe o mês da planilha de Indiacadores\n')
+    nome_do_arquivo = '.\\planilhas\\Indicadores - ' + mes.capitalize() + '.xlsx' #armazenando o nome da planilha em uma variável
 
 
     def insere_data_desconto(str1, str2, abertura, fechamento):
@@ -130,21 +130,21 @@ def ler_indicadores():
                                                 #ENTRADA DO CÓDIGO
 
     # data de inicio
-    while True:
-        entrada = input('Digite a data de entrada no formato dia/mes/ano:\n')
-        pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
-        if pattern.match(entrada):
-            break
+    # while True:
+    #     entrada = input('Digite a data de entrada no formato dia/mes/ano:\n')
+    #     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
+    #     if pattern.match(entrada):
+    #         break
 
-    # ultima data para leituta    
-    while True:
-        entrada2 = input('Digite a ultima data de entrada no formato dia/mes/ano:\n')
-        pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
-        if pattern.match(entrada2):
-            break
+    # # ultima data para leituta    
+    # while True:
+    #     entrada2 = input('Digite a ultima data de entrada no formato dia/mes/ano:\n')
+    #     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
+    #     if pattern.match(entrada2):
+    #         break
         
 
-    entrada2_data = datetime.strptime(entrada2, '%d/%m/%Y')
+    entrada2_data = datetime.strptime(data_fim, '%d/%m/%Y')
 
     data_validada = False
 
@@ -155,7 +155,7 @@ def ler_indicadores():
         data_compara = datetime.strptime(row['Unnamed: 5'][0:10], '%d/%m/%Y')
         
         if data_validada == False:
-            if row['Unnamed: 5'][0:10] == entrada:
+            if row['Unnamed: 5'][0:10] == data_inicio:
                 data_validada = True
                 
         elif data_compara > entrada2_data:
@@ -348,16 +348,6 @@ def ler_indicadores():
             'Tipo': tipo_codigos,
             'Par': possui_par
         } # Criando uma variavel data para a tabela ficar na ordem correta
-    print(len(tickets_codigo))
-    print(len(codigo_codigos))
-    print(len(data_codigos))
-    print(len(estacao_codigos))
-    print(len(empresa_codigos))
-    print(len(estado_codigos))
-    print(len(categoria_codigos))
-    print(len(tipo_codigos))
-    print(len(possui_par))
-    print('\n')
     df=pd.DataFrame(data) #dessa forma o data frame é printado com uma coluna contendo os tickets e uma coluna contendo todos os códigos
 
     data2 = {
@@ -370,14 +360,6 @@ def ler_indicadores():
         'Desconto': desconto_auto,
         'Empresa': empresa_auto
     }
-    print(len(tickets_auto))
-    print(len(desconto_abertura))
-    print(len(desconto_fechamento))
-    print(len(data_abertura))
-    print(len(data_fechamento))
-    print(len(desconto_auto))
-    print(len(empresa_auto))
-
     df2 = pd.DataFrame(data2)
 
     data3 = {
