@@ -84,7 +84,6 @@ while True:
     evento, valores = window.read()
 
     if evento == sg.WINDOW_CLOSED:
-        print('Fecha janela\n')
         break
     elif valores['-IN1-'] == True:
         window.close()
@@ -92,7 +91,6 @@ while True:
             evento_planilha, valores_planilha = window_planilha.read()
         
             if evento_planilha == sg.WINDOW_CLOSED:
-                print('Fecha janela\n')
                 break
             elif valores_planilha['-PLANILHA_MES-'] != '' and valores_planilha['-PLANILHA_INICIO-'] != '' and valores_planilha['-PLANILHA_FIM-'] != '' and valores_planilha['-PLANILHA_NOME-'] != '':
                 
@@ -114,7 +112,6 @@ while True:
             evento_auto, valores_auto = window_auto.read()
         
             if evento_auto == sg.WINDOW_CLOSED:
-                print('Fecha janela\n')
                 break
             elif valores_auto['-AUTO_PLANILHA-'] != '':
                 auto_request(valores_auto['-AUTO_PLANILHA-'])
@@ -131,7 +128,6 @@ while True:
             evento_manu, valores_manu = window_manu.read()
             empresa = 0
             if evento_manu == sg.WINDOW_CLOSED:
-                print('Fecha janela\n')
                 break
             elif valores_manu['-MANU_LINHA-'] != '':
                 if valores_manu['-MANU_LINHA-'][-1] not in ('0123456789'):

@@ -287,8 +287,8 @@ def ler_indicadores(mes, data_inicio, data_fim):
                         #     insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], ultima_entrada, 'Fechamento junto com a ocorrencia')
                         #     valida = False
                 if valida:
-                    insere_codigo(row['Unnamed: 0'], texto, pd_tabela_2['Informações da ocorrência'][0][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')
-                    insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][0][0:16], ultima_entrada, 'Fechamento junto com a ocorrencia')
+                    insere_codigo(row['Unnamed: 0'], texto, pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')
+                    insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], ultima_entrada, 'Fechamento junto com a ocorrencia')
                 tickets_auto.append(row['Unnamed: 0'])
                 codigo_auto.append(categoria_dicionario[ultima_entrada[6:10]])
                 empresa_auto.append(nome_empresa(ultima_entrada[0:5]))

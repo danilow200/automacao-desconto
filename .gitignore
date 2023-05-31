@@ -1,8 +1,12 @@
 *.xlsx
 *.exe
 *.csv
+*.zip
+*.spec
 chromedriver_win32
 __pycache__
 planilhas
 Perfil
 .vscode
+build
+output
