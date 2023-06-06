@@ -276,19 +276,16 @@ def ler_indicadores(mes, data_inicio, data_fim):
                 else:
                     estado_codigos.append(estacao[0:2]) #salva qual estado pertence a estacao
                 empresa_codigos.append(nome_empresa(ultima_entrada[0:5]))
-                data1 = datetime.strptime(data_codigos[cont2 - 1], '%d/%m/%Y %H:%M')
                 valida = True
-                
+                aux = 0
                 for index_tabela3,row_tabela3 in reversed(list(pd_tabela_2.iterrows())):
-                    if row_tabela3['Categoria'] == 'Direcionamento da Solicitação':
-                        data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], '%d/%m/%Y %H:%M')
-                        # if data2 > data1:
-                        #     insere_codigo(row['Unnamed: 0'], texto, pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')
-                        #     insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], ultima_entrada, 'Fechamento junto com a ocorrencia')
-                        #     valida = False
+                    if row_tabela3['Categoria'] == 'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N1':
+                        data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], '%d/%m/%Y %H:%M')
+                        aux = index_tabela3 - 2
+                        break
                 if valida:
-                    insere_codigo(row['Unnamed: 0'], texto, pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')
-                    insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][index_tabela3][0:16], ultima_entrada, 'Fechamento junto com a ocorrencia')
+                    insere_codigo(row['Unnamed: 0'], 'Direcionamento da tarefa Diagnosticar para o grupo N1', pd_tabela_2['Informações da ocorrência'][aux][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')
+                    insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][aux][0:16], ultima_entrada, 'Fechamento junto com a ocorrencia')
                 tickets_auto.append(row['Unnamed: 0'])
                 codigo_auto.append(categoria_dicionario[ultima_entrada[6:10]])
                 empresa_auto.append(nome_empresa(ultima_entrada[0:5]))

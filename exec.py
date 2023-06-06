@@ -97,7 +97,7 @@ while True:
                 pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
                 if pattern.match(valores_planilha['-PLANILHA_INICIO-']) and pattern.match(valores_planilha['-PLANILHA_FIM-']):
                     ler_indicadores(valores_planilha['-PLANILHA_MES-'], valores_planilha['-PLANILHA_INICIO-'], valores_planilha['-PLANILHA_FIM-'])
-                    compara_codigo(valores_planilha['-PLANILHA_NOME-'])
+                    compara_codigo(valores_planilha['-PLANILHA_NOME-'], valores_planilha['-PLANILHA_MES-'])
                     window_planilha.close()
                     break
                 else:
@@ -131,13 +131,13 @@ while True:
                 break
             elif valores_manu['-MANU_LINHA-'] != '':
                 if valores_manu['-MANU_LINHA-'][-1] not in ('0123456789'):
-                    sg.popup("Only digits allowed")
+                    sg.popup("Apenas números permitido")
                 else:
                     if valores_manu['-MANU_PAD-'] == True:
                         empresa = 1
                     else:
                         empresa = 2
-                    manu_desconto(empresa, valores_manu['-MANU_LINHA-'])
+                    # manu_desconto(empresa, valores_manu['-MANU_LINHA-'])
                     aceita_auto()
                     window_manu.close()
                     break

@@ -51,7 +51,7 @@ def calculate_time_percentage(time1, time2):
     percentage = total_seconds2 / total_seconds1
     return percentage
 
-def compara_codigo(nome_arquivo):
+def compara_codigo(nome_arquivo, mes):
     #------------------------------------------------------------------------------------------------------------------------
                                                 #DICIONARIOS
     categoria_dicionario = {
@@ -89,7 +89,7 @@ def compara_codigo(nome_arquivo):
     categoria_porcetagem_rad = {categoria: '00:00:00' for categoria in categorias}
 
     arquivo_desconto_auto = ".\\planilhas\\descontos.xlsx"
-    arquivo_desconto_dado = ".\\planilhas\\Indicadores - Maio.xlsx"
+    arquivo_desconto_dado = ".\\planilhas\\Indicadores - " + mes.capitalize() +".xlsx"
     #------------------------------------------------------------------------------------------------------------------------
                                                 #LENDO ARQUIVOS EXCEL
     desconto_auto_planilha = pd.read_excel(arquivo_desconto_auto,sheet_name='Codigos com desconto automatico')
@@ -119,7 +119,7 @@ def compara_codigo(nome_arquivo):
             tickets_corretos.append(row_dado['Unnamed: 0'])
             categoria_corretos.append(row_dado['Unnamed: 3'])
             
-            if 'padtec' in row_dado['Unnamed: 7']:
+            if 'PADTEC:' in row_dado['Unnamed: 10']:
                 empresa.append(str('PADTEC'))
             else:
                 empresa.append(str('RADIANTE'))
