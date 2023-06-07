@@ -40,7 +40,7 @@ def manu_desconto(entrada, linha):
     for index,row in planilha.iterrows():
         if pd.isna(row[empresa]):
             break
-        if row['Unnamed: 9'] == 'Aprovado':
+        if row['Unnamed: 9'] == 'Aprovado' or row['Unnamed: 9'] == 'APROVADO':
             descontos.append(Desconto("descontos", row[empresa], f"{empresa}: {row['Unnamed: 10']}", converter_data(str(row["Unnamed: 4"])), converter_data(str(row["Unnamed: 5"])), row["Unnamed: 3"]))
 
     # Roda o array de descontos e faz a solicitação de desconto

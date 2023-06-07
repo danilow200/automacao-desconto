@@ -137,7 +137,7 @@ while True:
                         empresa = 1
                     else:
                         empresa = 2
-                    # manu_desconto(empresa, valores_manu['-MANU_LINHA-'])
+                    manu_desconto(empresa, valores_manu['-MANU_LINHA-'])
                     aceita_auto()
                     window_manu.close()
                     break
@@ -145,15 +145,3 @@ while True:
                 sg.popup("Prencha o campo linha de inicio")
 
     window.close()
-
-# case = int(input('Informe a função desejada\n1 - Gerar planilha de desconto automático\n2 - Aplicar desconto automático\n3 - Desconto manual\n'))
-
-# if case == 1:
-#     ler_indicadores()
-#     compara_codigo()
-# elif case == 2:
-#     auto_request()
-#     aceita_auto()
-# elif case == 3:
-#     manu_desconto()
-#     aceita_auto()
