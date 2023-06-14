@@ -296,8 +296,9 @@ def ler_indicadores(mes, data_inicio, data_fim):
                 cont2 += 1
 
             valida_categoria = False
+            salva_info = ''
             if ultima_entrada[5:11]  == '$IPFR#':
-                for index_tabela3,row_tabela3 in reversed(list(pd_tabela_2.iterrows())):
+                for index_tabela3,row_tabela3 in pd_tabela_2.iterrows():
                     if row_tabela3['Categoria'] == 'Solicitação Restaurada' and valida_categoria == False:
                         for i in range(2):
                             possui_par.append('Possui')
@@ -312,7 +313,9 @@ def ler_indicadores(mes, data_inicio, data_fim):
                         # insere_data_desconto(row_tabela3['Informações da ocorrência'][0:16], pd_tabela_2['Informações da ocorrência'][0][0:16], 'Solicitação Restaurada Abertura', 'Solicitação Restaurada Fechamento')
                         valida_categoria = True
                         salva_info = row_tabela3['Informações da ocorrência'][0:16]
-
+                        break
+                    
+                for index_tabela3,row_tabela3 in pd_tabela_2.iterrows():
                     if valida_categoria:
                         if row_tabela3['Categoria'] == 'Ocorrências: Direcionamento da tarefa Fechar para o grupo N1' or row_tabela3['Categoria'] == 'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N1':
                             insere_codigo(row['Unnamed: 0'], 'Direcionamento da tarefa Fechar para o grupo N1', pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], estacao, 'Falha Restabelecida', 'Fechamento')

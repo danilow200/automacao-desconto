@@ -25,7 +25,7 @@ def auto_request(nome_arquivo):
 
     # Adiciona os tickets com descontos para um array de descontos utilizando a classe Desconto para estrutura-lo correntamente
     for index,row in planilha[1:].iterrows():
-        descontos.append(Desconto("descontos", row["Unnamed: 1"], f"{row['Unnamed: 8']}: Desconto Automatico", row["Unnamed: 5"] + ':00', row["Unnamed: 6"] + ':00', row["Unnamed: 4"]))
+        descontos.append(Desconto("descontos", row["Unnamed: 1"], f"{row['Unnamed: 8']}: Desconto Automático", row["Unnamed: 5"] + ':00', row["Unnamed: 6"] + ':00', row["Unnamed: 4"]))
 
     # Roda o array de descontos e faz a solicitação de desconto
     for i in descontos:
