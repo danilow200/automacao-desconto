@@ -65,20 +65,14 @@ def compara_codigo(nome_arquivo, mes):
                         'IPTS': 'Terceiros',
                         'taçã': 'Falha Restabelecida'
                     }
-
-    float_format = {'Porcetagem PADTEC': '%.2f%%', 'Porcetagem RADIANTE': '%.2f%%'}
     #------------------------------------------------------------------------------------------------------------------------
                                                 #ARRAYS E VARIÁVEIS
     desconto_dado = []
-    desconto_auto = []
-    desconto_total = []
     diferenca_desconto = []
     desconto_auto_final = []
     empresa = []
     tickets_corretos = []
     categoria_corretos = []
-
-    ticket_anterior = 0
 
     categorias = ["Falha Restabelecida", "Acesso", "Aguardando CIGR", "Terceiros", "Área de Risco", "Falta de Energia", "Outros", "Atividade Agendada"]
     categoria_soma_dada_pad = {categoria: '00:00:00' for categoria in categorias}

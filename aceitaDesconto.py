@@ -61,7 +61,7 @@ def aceita_auto():
         data_descont_atual = datetime.strptime(row['Solicitação'][0:10], '%Y-%m-%d')
         if(row['Status'] == 'pendente' and row['Solicitante'] == 'danilo.silva'):
             driver.find_element(By.XPATH, f'//*[@id="descontos_panel"]/tbody/tr[{cont}]/td[1]/a').click()
-            time.sleep(2)
+            time.sleep(3)
             driver.find_element(By.CSS_SELECTOR, 'button.aprovar.ui-button.ui-corner-all.ui-widget.ui-button-icon-only').click()
             #driver.find_element(By.CSS_SELECTOR, 'button.lixeira.ui-button.ui-corner-all.ui-widget.ui-button-icon-only').click()
             wait.until(expected_conditions.alert_is_present())
@@ -69,7 +69,7 @@ def aceita_auto():
             text = alert.text
             alert.accept()
             driver.find_element(By.CSS_SELECTOR, 'button.ui-dialog-titlebar-close').click()
-            time.sleep(1)
+            time.sleep(2)
         else:
             cont += 1
 

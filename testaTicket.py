@@ -129,21 +129,6 @@ def ler_indicadores(mes, data_inicio, data_fim):
     #------------------------------------------------------------------------------------------------------------------------
                                                 #ENTRADA DO CÓDIGO
 
-    # data de inicio
-    # while True:
-    #     entrada = input('Digite a data de entrada no formato dia/mes/ano:\n')
-    #     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
-    #     if pattern.match(entrada):
-    #         break
-
-    # # ultima data para leituta    
-    # while True:
-    #     entrada2 = input('Digite a ultima data de entrada no formato dia/mes/ano:\n')
-    #     pattern = re.compile(r"\d{2}/\d{2}/\d{4}")
-    #     if pattern.match(entrada2):
-    #         break
-        
-
     entrada2_data = datetime.strptime(data_fim, '%d/%m/%Y')
 
     data_validada = False
