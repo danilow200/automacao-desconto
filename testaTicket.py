@@ -45,7 +45,7 @@ def ler_indicadores(mes, data_inicio, data_fim):
                         'IPFA': 'Acesso', 
                         'IPAC': 'Aguardando CIGR',
                         'IPAR': 'Área de Risco',
-                        'IPAA':'Atividade Agendada',
+                        'IPAA': 'Atividade Agendada',
                         'IPFR': 'Falha Restabelecida',
                         'IPFE': 'Falta de Energia',
                         'IPOS': 'Outros',
@@ -64,6 +64,17 @@ def ler_indicadores(mes, data_inicio, data_fim):
                     '[RAD]$IPAR#', '[RAD]#IPAR$', '[RAD]$IPAA#', '[RAD]#IPAA$',
                     '[RAD]$IPFR#', '[RAD]#IPFR$', '[RAD]$IPFE#', '[RAD]#IPFE$',
                     '[RAD]$IPOS#', '[RAD]#IPOS$', '[RAD]$IPTS#', '[RAD]#IPTS$',]
+    
+    lista_abertura_no_final = ['[PAD]$IPAC#', '[PAD]$IPTS#',
+                               '[RAD]$IPAC#', '[RAD]$IPTS#',]
+    
+    lista_tramitacao = [
+                        'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N1', 
+                        'Ocorrências: Direcionamento da tarefa Fechar para o grupo N1',
+                        'Ocorrências: Direcionamento da tarefa Restabelecer campo infraestrutura para o grupo Campo_Infra', 
+                        'Ocorrências: Direcionamento da tarefa Restabelecer campo sobressalente para o grupo Campo_Sobressalente',
+                        'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N2_DWDM',
+                        ]
 
     #Array para todos os tickets que possuem algum dos códigos da lista de textos
     tickets_codigo = []
@@ -238,6 +249,7 @@ def ler_indicadores(mes, data_inicio, data_fim):
                         empresa_codigos.append(nome_empresa(texto[0:5]))
                         
                         par = False
+                        data1 = datetime.strptime(row_tabela2[0], '%d/%m/%Y %H:%M')
                         
                         if texto[6:10] == ultima_entrada[6:10] and texto[-1] != ultima_entrada[-1] and texto[-1] != "#":
                             insere_data_desconto(data_codigos[cont2 - 1], data_codigos[cont2], ultima_entrada, texto)
@@ -255,7 +267,7 @@ def ler_indicadores(mes, data_inicio, data_fim):
     #------------------------------------------------------------------------------------------------------------------------
                 #ANALISA SEGUNDA TABELA EM BUSCA PARA APLICAR DESCONTOS QUE NÃO FOI POSSIVEL APENAS COM A PRIMEIRA TABELA
                                 
-            if ultima_entrada[5:11]  == '$IPFE#':
+            if ultima_entrada[5:11]  == '$IPFE#' or ultima_entrada[5:11]  == '$IPFR#':
                 if estacao[0] == ' ':
                     estado_codigos.append(estacao[1:3])
                 else:
@@ -264,13 +276,20 @@ def ler_indicadores(mes, data_inicio, data_fim):
                 valida = True
                 aux = 0
                 for index_tabela3,row_tabela3 in reversed(list(pd_tabela_2.iterrows())):
-                    if row_tabela3['Categoria'] == 'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N1':
-                        data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], '%d/%m/%Y %H:%M')
-                        aux = index_tabela3 - 2
+                    entrou = False
+                    for tramitacao in lista_tramitacao:
+                        if row_tabela3['Categoria'] == tramitacao:
+                            data2 = datetime.strptime(pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], '%d/%m/%Y %H:%M')
+                            if data2 > data1:
+                                aux = index_tabela3 - 2
+                                msg = row_tabela3['Categoria']
+                                entrou = True
+                                break
+                    if entrou:
                         break
                 if valida:
-                    insere_codigo(row['Unnamed: 0'], 'Direcionamento da tarefa Diagnosticar para o grupo N1', pd_tabela_2['Informações da ocorrência'][aux][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')
-                    insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][aux][0:16], ultima_entrada, 'Fechamento junto com a ocorrencia')
+                    insere_codigo(row['Unnamed: 0'], msg, pd_tabela_2['Informações da ocorrência'][aux][0:16], estacao, categoria_dicionario[texto[6:10]], 'Fechamento')
+                    insere_data_desconto(data_codigos[cont2 - 1], pd_tabela_2['Informações da ocorrência'][aux][0:16], ultima_entrada, msg)
                 tickets_auto.append(row['Unnamed: 0'])
                 codigo_auto.append(categoria_dicionario[ultima_entrada[6:10]])
                 empresa_auto.append(nome_empresa(ultima_entrada[0:5]))
@@ -279,40 +298,32 @@ def ler_indicadores(mes, data_inicio, data_fim):
                         
                 possui_par.append(par_correto(par))
                 cont2 += 1
+            
+            for texto in lista_abertura_no_final:
+                if texto in pd_tabela[5][0]:
+                    print('entrei no 1')
+                    for i in range(2):
+                        possui_par.append('Possui')
+                        if estacao[0] == ' ':
+                            estado_codigos.append(estacao[1:3])
+                        else:
+                            estado_codigos.append(estacao[0:2]) #salva qual estado pertence a estacao
+                        empresa_codigos.append(nome_empresa(texto[0:5])) #achar outra solução
+                    insere_codigo(row['Unnamed: 0'], texto, pd_tabela[0][0], estacao, categoria_dicionario[texto[6:10]], tipo_de_codigo(texto[5:6]))
+                    cont2 +=1
 
-            valida_categoria = False
-            salva_info = ''
-            if ultima_entrada[5:11]  == '$IPFR#':
-                for index_tabela3,row_tabela3 in pd_tabela_2.iterrows():
-                    if row_tabela3['Categoria'] == 'Solicitação Restaurada' and valida_categoria == False:
-                        for i in range(2):
-                            possui_par.append('Possui')
-                            if estacao[0] == ' ':
-                                estado_codigos.append(estacao[1:3])
-                            else:
-                                estado_codigos.append(estacao[0:2]) #salva qual estado pertence a estacao
-                            empresa_codigos.append(nome_empresa(ultima_entrada[0:5])) #achar outra solução
-                        insere_codigo(row['Unnamed: 0'], 'Solicitação Restaurada', row_tabela3['Informações da ocorrência'][0:16], estacao, 'Falha Restabelecida', 'Abertura')
-                        
-                        cont2 += 1
-                        # insere_data_desconto(row_tabela3['Informações da ocorrência'][0:16], pd_tabela_2['Informações da ocorrência'][0][0:16], 'Solicitação Restaurada Abertura', 'Solicitação Restaurada Fechamento')
-                        valida_categoria = True
-                        salva_info = row_tabela3['Informações da ocorrência'][0:16]
-                        break
-                    
-                for index_tabela3,row_tabela3 in pd_tabela_2.iterrows():
-                    if valida_categoria:
+                    for index_tabela3,row_tabela3 in pd_tabela_2.iterrows():
                         if row_tabela3['Categoria'] == 'Ocorrências: Direcionamento da tarefa Fechar para o grupo N1' or row_tabela3['Categoria'] == 'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N1':
-                            insere_codigo(row['Unnamed: 0'], 'Direcionamento da tarefa Fechar para o grupo N1', pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], estacao, 'Falha Restabelecida', 'Fechamento')
-                            insere_data_desconto(salva_info, pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], 'Solicitação Restaurada', 'Direcionamento da tarefa Fechar para o grupo N1')
+                            print('entrei no 2')
+                            insere_codigo(row['Unnamed: 0'], 'Direcionamento da tarefa Fechar para o grupo N1', pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], estacao, texto, 'Fechamento')
+                            insere_data_desconto(pd_tabela[0][0], pd_tabela_2['Informações da ocorrência'][index_tabela3 - 2][0:16], texto, 'Direcionamento da tarefa Fechar para o grupo N1')
                             tickets_auto.append(row['Unnamed: 0'])
-                            codigo_auto.append('Falha Restabelecida')
-                            empresa_auto.append(nome_empresa(ultima_entrada[0:5]))
-                            cont2 += 1
+                            codigo_auto.append(categoria_dicionario[texto[6:10]])
+                            empresa_auto.append(nome_empresa(texto[0:5]))
+                            cont2 +=1
                             break
                             
             chrome.quit #fecha o chrome após terminar a operação desejada
-            
             
     #------------------------------------------------------------------------------------------------------------------------
                                     #CRIAÇÃO DOS DATAFRAMES E DO DOCUMENTO EXCEL
