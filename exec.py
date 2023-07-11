@@ -7,6 +7,8 @@ import PySimpleGUI as sg
 from PySimpleGUI import Column, VSeparator
 import re
 
+
+# Layout do PySimleGuy
 sg.theme('SystemDefault')
 
 layout_esquerdo = [
@@ -41,6 +43,7 @@ layout_planilha = [
 layout_auto = [
     [sg.Text('Aplicar Desconto Automático', font=("Helvetica", 10, "bold"))],
     [sg.Text('Informe o nome da planilha com os descontos'), sg.Push(),sg.Input(key='-AUTO_PLANILHA-')],
+    [sg.Text('Informe o cookie de login'), sg.Push(),sg.Input(key='-AUTO_COOKIE-')],
     [sg.Push(), sg.Button('Aplicar', size=(20,1), button_color=('white', '#28478E'),border_width=0)]
 ]
 
@@ -49,6 +52,7 @@ layout_manu = [
     [sg.Push()],
     [sg.Text('Escolha a empresa da planilha'), sg.Push() ,sg.Radio('PADTEC', "RADIO1", default=True, key="-MANU_PAD-"), sg.Push(),sg.Radio('RADIANTE', "RADIO1", default=False, key="-MANU_RAD-")],
     [sg.Text('Informe a linha que inicia os novos descontos'), sg.Push(),sg.Input(key='-MANU_LINHA-', size=(36, 1))],
+    [sg.Text('Informe o cookie de login'), sg.Push(),sg.Input(key='-MANU_COOKIE-', size=(36, 1))],
     [sg.Push(), sg.Button('Aplicar', size=(20,1), button_color=('white', '#28478E'),border_width=0)]
 ]
 
@@ -80,6 +84,7 @@ window_manu = sg.Window(
     icon='./assets/icontelebras_resized.ico'
 )
 
+# while rodando o a interface com switch case para cada seleção no layout
 while True:
     evento, valores = window.read()
 
@@ -114,8 +119,8 @@ while True:
             if evento_auto == sg.WINDOW_CLOSED:
                 break
             elif valores_auto['-AUTO_PLANILHA-'] != '':
-                auto_request(valores_auto['-AUTO_PLANILHA-'])
-                aceita_auto()
+                auto_request(valores_auto['-AUTO_PLANILHA-'], valores_auto['-AUTO_COOKIE-'])
+                aceita_auto(valores_auto['-AUTO_COOKIE-'])
                 window_auto.close()
                 break
             else:
@@ -137,8 +142,8 @@ while True:
                         empresa = 1
                     else:
                         empresa = 2
-                    manu_desconto(empresa, valores_manu['-MANU_LINHA-'])
-                    aceita_auto()
+                    manu_desconto(empresa, valores_manu['-MANU_LINHA-'], valores_manu['-MANU_COOKIE-'])
+                    aceita_auto(valores_manu['-MANU_COOKIE-'])
                     window_manu.close()
                     break
             else:

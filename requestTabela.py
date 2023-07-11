@@ -18,7 +18,7 @@ class Desconto:
         self.fim = fim
         self.categoria = categoria
 
-def manu_desconto(entrada, linha):
+def manu_desconto(entrada, linha, cookie):
 
     descontos = []
 
@@ -36,6 +36,8 @@ def manu_desconto(entrada, linha):
     planilha = planilha.drop(index=range(0,linha),axis=0)
     # print(planilha)
 
+    cookie_atu = 'PHPSESSID=' + cookie
+
     # Adiciona os tickets com descontos para um array de descontos utilizando a classe Desconto para estrutura-lo correntamente
     for index,row in planilha.iterrows():
         if pd.isna(row[empresa]):
@@ -47,6 +49,6 @@ def manu_desconto(entrada, linha):
     for i in descontos:
         url = "https://report.telebras.com.br/pages/tickets/control.php?insert=" + i.insert + '&ticket=' + str(i.ticket) + '&observacao=' + i.observacao + '&inicio=' + i.inicio + '&fim=' + i.fim + '&categoria=' + i.categoria
         payload={} 
-        headers = { 'Cookie': 'PHPSESSID=578a030e15574ea6c89b3b77590e9353'} 
+        headers = { 'Cookie': cookie_atu} 
         response = requests.request("POST", url, headers=headers, data=payload) 
         print(response.text)

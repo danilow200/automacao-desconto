@@ -13,7 +13,7 @@ def converte_data(data):
     data_formatada = ano + '-' + mes + '-' + dia
     return data_formatada
 
-def aceita_auto():
+def aceita_auto(cookie):
 
     chrome_options = Options()
     chrome_options.add_argument("--start-maximized")  # Maximiza a janela do navegador
@@ -27,7 +27,7 @@ def aceita_auto():
     driver = webdriver.Chrome(options=chrome_options)
 
     driver.get('https://report.telebras.com.br/pages/tickets/tickets.php')
-    driver.add_cookie({'name': 'PHPSESSID', 'value': '578a030e15574ea6c89b3b77590e9353'})
+    driver.add_cookie({'name': 'PHPSESSID', 'value': cookie})
     driver.refresh()
 
     time.sleep(1)
@@ -49,7 +49,7 @@ def aceita_auto():
 
     for index,row in pd_tabela.iterrows(): 
         data_descont_atual = datetime.strptime(row['Solicitação'][0:10], '%Y-%m-%d')
-        if(row['Status'] == 'pendente' and row['Solicitante'] == 'danilo.silva'):
+        if(row['Status'] == 'pendente'):
             driver.find_element(By.XPATH, f'//*[@id="descontos_panel"]/tbody/tr[{cont}]/td[1]/a').click()
             time.sleep(4)
             butao_existe = driver.find_elements(By.CSS_SELECTOR, 'button.aprovar.ui-button.ui-corner-all.ui-widget.ui-button-icon-only')
