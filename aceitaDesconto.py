@@ -4,6 +4,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
@@ -16,6 +18,7 @@ def converte_data(data):
 def aceita_auto(cookie):
 
     chrome_options = Options()
+    servico = Service(ChromeDriverManager().install())
     chrome_options.add_argument("--start-maximized")  # Maximiza a janela do navegador
     chrome_options.add_argument("--disable-extensions")  # Desativa as extensões do Chrome
     chrome_options.add_argument("--disable-gpu")  # Desativa a aceleração de hardware
@@ -24,7 +27,7 @@ def aceita_auto(cookie):
     chrome_options.add_argument("--force-device-scale-factor=0.75")  # Define o zoom em 25%
     #chrome_options.add_argument('--headless')
 
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options, service=servico)
 
     driver.get('https://report.telebras.com.br/pages/tickets/tickets.php')
     driver.add_cookie({'name': 'PHPSESSID', 'value': cookie})

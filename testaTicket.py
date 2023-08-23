@@ -163,11 +163,11 @@ def ler_indicadores(mes, data_inicio, data_fim):
 
         if data_validada:
             tickets_detro_data.append(row['Unnamed: 0'])
-            #servico = Service(ChromeDriverManager().install())
+            servico = Service(ChromeDriverManager().install())
             options = webdriver.ChromeOptions()
             options.add_argument("--headless") #define para o chrome abrir em segundo plano
             # options.add_argument("--force-device-scale-factor=0.75")  # Define o zoom em 75%
-            chrome = webdriver.Chrome(options=options) #cria uma instância do chrome
+            chrome = webdriver.Chrome(options=options, service=servico) #cria uma instância do chrome
             chrome.get(url_logs)#navega para essa url do chrome    
             time.sleep(1) #Delay 
             
