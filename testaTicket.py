@@ -77,7 +77,8 @@ def ler_indicadores(mes, data_inicio, data_fim):
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo sobressalente para o grupo Campo_Sobressalente',
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo despacho para o grupo Campo_Despacho',
                         'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N2_DWDM',
-                        'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N2_IP'
+                        'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N2_IP',
+                        'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N2 - Clientes'
                         ]
 
     #Array para todos os tickets que possuem algum dos códigos da lista de textos
@@ -237,7 +238,7 @@ def ler_indicadores(mes, data_inicio, data_fim):
                                 #ANALISA PRIMEIRA TABELA EM BUSCA DE CODIGOS PARA DESCONTO
             
             for index_tabela2,row_tabela2 in reversed(list(pd_tabela.iterrows())):
-                
+                # print(f'cont = {cont2}')
                 if type(row_tabela2[5]) == float: #caso tenha uma celula vazia na tabela, ela será convertida para string
                     row_tabela2[5] = str(row_tabela2[5])
                 
@@ -246,6 +247,8 @@ def ler_indicadores(mes, data_inicio, data_fim):
                     if texto in row_tabela2[5]:
                         #se for true, excuta:
                         # if texto != '$IPFR#':
+                        # print(len(data_codigos))
+                        
                         insere_codigo(row['Unnamed: 0'], texto, row_tabela2[0], estacao, categoria_dicionario[texto[6:10]], tipo_de_codigo(texto[5:6]))
                         if estacao[0] == ' ':
                             estado_codigos.append(estacao[1:3])

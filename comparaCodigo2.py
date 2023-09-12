@@ -113,7 +113,7 @@ def compara_codigo(nome_arquivo, mes):
             tickets_corretos.append(row_dado['Unnamed: 0'])
             categoria_corretos.append(row_dado['Unnamed: 3'])
             
-            if 'PADTEC:' in row_dado['Unnamed: 10']:
+            if 'PADTEC:' in str(row_dado['Unnamed: 10']):
                 empresa.append(str('PADTEC'))
             else:
                 empresa.append(str('RADIANTE'))
