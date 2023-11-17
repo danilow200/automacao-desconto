@@ -73,6 +73,7 @@ def ler_indicadores(mes, data_inicio, data_fim):
     lista_tramitacao = [
                         'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N1', 
                         'Ocorrências: Direcionamento da tarefa Fechar para o grupo N1',
+                        'Ocorrências: Direcionamento da tarefa Fechar para o grupo N2_IP',
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo infraestrutura para o grupo Campo_Infra', 
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo sobressalente para o grupo Campo_Sobressalente',
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo despacho para o grupo Campo_Despacho',
