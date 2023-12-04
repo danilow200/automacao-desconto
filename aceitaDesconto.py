@@ -37,6 +37,8 @@ def aceita_auto(cookie):
 
     driver.find_element(By.XPATH,'//*[@id="container"]/a').click()
     time.sleep(1)
+    driver.find_element(By.XPATH,'//*[@id="descontos_panel"]/thead/tr/th[6]').click()
+    time.sleep(1)
 
     elemento_tabela = driver.find_element(By.XPATH,'//*[@id="descontos_panel"]' ) #buscando a tabela/pega as informações
     html_content = elemento_tabela.get_attribute('outerHTML') #trazendo o HTML do elemento tabela/ transforma a tabela em variável a partir dos dados HTML
