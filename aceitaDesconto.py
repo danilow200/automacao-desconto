@@ -57,7 +57,7 @@ def aceita_auto(cookie):
         if(row['Status'] == 'pendente'):
             driver.find_element(By.XPATH, f'//*[@id="descontos_panel"]/tbody/tr[{cont}]/td[1]/a').click()
             time.sleep(4)
-            atendimento = driver.find_element(By.XPATH, '//*[@id="atendimento"]/font')
+            atendimento = driver.find_element(By.CSS_SELECTOR, 'font.red')
             if(atendimento != 'desconto maior que período'):
                 butao_existe = driver.find_elements(By.CSS_SELECTOR, 'button.aprovar.ui-button.ui-corner-all.ui-widget.ui-button-icon-only')
                 if len(butao_existe) == 0:
