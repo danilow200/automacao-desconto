@@ -77,6 +77,8 @@ def ler_indicadores(mes, data_inicio, data_fim):
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo infraestrutura para o grupo Campo_Infra', 
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo sobressalente para o grupo Campo_Sobressalente',
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo despacho para o grupo Campo_Despacho',
+                        'Ocorrências: Direcionamento da tarefa Restabelecer campo dwdm para o grupo Campo_DWDM',
+                        'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo Clientes',
                         'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N2_DWDM',
                         'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N2_IP',
                         'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N2 - Clientes'
