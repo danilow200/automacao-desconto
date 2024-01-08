@@ -52,7 +52,7 @@ def manu_desconto(entrada, linha, cookie):
     else:
         empresa = 'RADIANTE'
 
-    nome_do_arquivo = f'.\\planilhas\\Solicitação de Descontos {empresa}.xlsx'
+    nome_do_arquivo = f'.\\planilhas\\Solicitação de Descontos 2024 {empresa}.xlsx'
 
     planilha = pd.read_excel(nome_do_arquivo,sheet_name='Planilha1')
     linha = int(linha) - 2
@@ -67,7 +67,7 @@ def manu_desconto(entrada, linha, cookie):
         if pd.isna(row[empresa]):
             break
         if row['Unnamed: 9'] == 'Aprovado' or row['Unnamed: 9'] == 'APROVADO':
-            descontos.append(Desconto("descontos", row[empresa], f"{empresa}: {row['Unnamed: 10']}", converter_data(str(row["Unnamed: 4"])), converter_data(str(row["Unnamed: 5"])), row["Unnamed: 3"]))
+            descontos.append(Desconto("descontos", row[empresa], f"{empresa}: {row['Unnamed: 11']}", converter_data(str(row["Unnamed: 4"])), converter_data(str(row["Unnamed: 5"])), row["Unnamed: 3"]))
         elif str(row['Unnamed: 9']).capitalize() == 'Expurgado':
             expurgo.append(row[empresa])
         elif str(row['Unnamed: 9']).capitalize() == 'Neutralizado':
