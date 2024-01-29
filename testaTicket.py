@@ -74,6 +74,7 @@ def ler_indicadores(mes, data_inicio, data_fim):
                         'Ocorrências: Direcionamento da tarefa Diagnosticar para o grupo N1', 
                         'Ocorrências: Direcionamento da tarefa Fechar para o grupo N1',
                         'Ocorrências: Direcionamento da tarefa Fechar para o grupo N2_IP',
+                        'Ocorrências: Direcionamento da tarefa Fechar para o grupo CIM',
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo infraestrutura para o grupo Campo_Infra', 
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo sobressalente para o grupo Campo_Sobressalente',
                         'Ocorrências: Direcionamento da tarefa Restabelecer campo despacho para o grupo Campo_Despacho',
@@ -182,6 +183,18 @@ def ler_indicadores(mes, data_inicio, data_fim):
             elemento_botao.send_keys(Keys.RETURN)
             
             print(row['Unnamed: 0']) #prita no terminal o ticket atual
+
+
+            # caso o código quebre, use as linhas abaixo para achar o ticket que está dando problema
+            # print(len(tickets_auto))
+            # print(len(desconto_abertura))
+            # print(len(desconto_fechamento))
+            # print(len(codigo_auto))
+            # print(len(data_abertura))
+            # print(len(data_fechamento))
+            # print(len(desconto_auto))
+            # print(len(empresa_auto))
+
 
     #------------------------------------------------------------------------------------------------------------------------
                                         #LEITURA DA PRIMEIRA TABELA DO TICKET  
@@ -315,6 +328,7 @@ def ler_indicadores(mes, data_inicio, data_fim):
             
     #------------------------------------------------------------------------------------------------------------------------
                                     #CRIAÇÃO DOS DATAFRAMES E DO DOCUMENTO EXCEL
+
     #Fazer a tabela no Pandas
     data = {
             'Tickets': tickets_codigo, 
