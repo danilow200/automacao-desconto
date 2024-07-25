@@ -19,6 +19,7 @@ def aceita_auto(cookie):
 
     chrome_options = Options()
     servico = Service(ChromeDriverManager().install())
+    servico2 = Service(executable_path='./chromedriver.exe')
     chrome_options.add_argument("--start-maximized")  # Maximiza a janela do navegador
     chrome_options.add_argument("--disable-extensions")  # Desativa as extensões do Chrome
     chrome_options.add_argument("--disable-gpu")  # Desativa a aceleração de hardware
@@ -27,7 +28,7 @@ def aceita_auto(cookie):
     chrome_options.add_argument("--force-device-scale-factor=0.75")  # Define o zoom em 25%
     #chrome_options.add_argument('--headless')
 
-    driver = webdriver.Chrome(options=chrome_options, service=servico)
+    driver = webdriver.Chrome(options=chrome_options, service=servico2)
 
     driver.get('https://report.telebras.com.br/pages/tickets/tickets.php')
     driver.add_cookie({'name': 'PHPSESSID', 'value': cookie})

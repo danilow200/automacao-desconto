@@ -33,7 +33,7 @@ layout = [
 
 layout_planilha = [
     [sg.Text('Gerar planilha de desconto automático', font=("Helvetica", 10, "bold"))],
-    [sg.Text('Informe o mês da planilha de Indiacadores'), sg.Push(),sg.Input(key='-PLANILHA_MES-')],
+    [sg.Text('Informe o mês da planilha de Indicadores'), sg.Push(),sg.Input(key='-PLANILHA_MES-')],
     [sg.Text('Digite a data de entrada no formato dia/mes/ano'), sg.Push(), sg.Input(key='-PLANILHA_INICIO-')],
     [sg.Text('Digite a ultima data de entrada no formato dia/mes/ano'), sg.Push(), sg.Input(key='-PLANILHA_FIM-')],
     [sg.Text('Nome para a planilha'), sg.Push(), sg.Input(key='-PLANILHA_NOME-')],
@@ -108,7 +108,7 @@ while True:
                 else:
                     sg.popup("A data não está no formato dia/mês/ano")
             else:
-                sg.popup("Prencha todos os campos")
+                sg.popup("Preencha todos os campos")
        
     elif valores['-IN2-'] == True:
         
@@ -119,12 +119,12 @@ while True:
             if evento_auto == sg.WINDOW_CLOSED:
                 break
             elif valores_auto['-AUTO_PLANILHA-'] != '':
-                auto_request(valores_auto['-AUTO_PLANILHA-'], valores_auto['-AUTO_COOKIE-'])
+                # auto_request(valores_auto['-AUTO_PLANILHA-'], valores_auto['-AUTO_COOKIE-'])
                 aceita_auto(valores_auto['-AUTO_COOKIE-'])
                 window_auto.close()
                 break
             else:
-                sg.popup("Prencha o campo com a planilha")
+                sg.popup("Preencha o campo com a planilha")
 
     elif valores['-IN3-'] == True:
         
@@ -147,6 +147,6 @@ while True:
                     window_manu.close()
                     break
             else:
-                sg.popup("Prencha o campo linha de inicio")
+                sg.popup("Preencha o campo linha de inicio")
 
     window.close()
