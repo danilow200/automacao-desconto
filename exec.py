@@ -119,7 +119,7 @@ while True:
             if evento_auto == sg.WINDOW_CLOSED:
                 break
             elif valores_auto['-AUTO_PLANILHA-'] != '':
-                # auto_request(valores_auto['-AUTO_PLANILHA-'], valores_auto['-AUTO_COOKIE-'])
+                auto_request(valores_auto['-AUTO_PLANILHA-'], valores_auto['-AUTO_COOKIE-'])
                 aceita_auto(valores_auto['-AUTO_COOKIE-'])
                 window_auto.close()
                 break
