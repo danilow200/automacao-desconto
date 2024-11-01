@@ -168,7 +168,7 @@ def ler_indicadores(mes, data_inicio, data_fim):
 
         if data_validada:
             tickets_detro_data.append(row['Unnamed: 0'])
-            servico = Service(ChromeDriverManager().install())
+            # servico = Service(ChromeDriverManager().install())
             servico2 = Service(executable_path='./chromedriver.exe')
             options = webdriver.ChromeOptions()
             options.add_argument("--headless") #define para o chrome abrir em segundo plano
