@@ -18,7 +18,6 @@ def converte_data(data):
 def aceita_auto(cookie):
 
     chrome_options = Options()
-    servico = Service(ChromeDriverManager().install())
     servico2 = Service(executable_path='./chromedriver.exe')
     chrome_options.add_argument("--start-maximized")  # Maximiza a janela do navegador
     chrome_options.add_argument("--disable-extensions")  # Desativa as extensões do Chrome
